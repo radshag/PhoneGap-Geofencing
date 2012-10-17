@@ -5,7 +5,7 @@ Geofencing Plugin For Phonegap
 
 The MIT License
 
-Copyright (c) 2012 Dov Goldberg 
+Copyright (c) 2012 Dov Goldberg
 EMAIL: dov.goldberg@ogonium.com   
 WEBSITE: http://www.ogonium.com
 
