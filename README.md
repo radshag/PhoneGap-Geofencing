@@ -1,7 +1,7 @@
 PhoneGap-Geofencing
 ===================
 
-Geofencing Plugin For Phonegap
+Geofencing Plugin For Phonegap - http://www.phonegap.com
 
 The MIT License
 
