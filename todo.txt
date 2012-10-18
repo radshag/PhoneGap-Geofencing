@@ -54,6 +54,3 @@ DGGeofencing.getWatchedRegionIds(
     	console.log("error");
     }
 );
-
-
-DGGeofencing.regionMonitorUpdate({"status":"enter","fid":"31.896099425829057,35.01764486981446"});

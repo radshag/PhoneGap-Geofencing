@@ -85,49 +85,7 @@ function retrieveLocations() {
 	navigator.geolocation.getCurrentPosition(onRetrieveLocationSuccess, onRetrieveLocationError);
 }
 function onRetrieveLocationSuccess(position){
-	
-	//DGGeofencing.regionMonitorUpdate({"status":"left","fid":"31.896099425829057,35.01764486981446"});
-	
 	currentLandL = position.coords.latitude+","+position.coords.longitude;
-	console.log(currentLandL);
-	// var params = {"fid": currentLandL, "radius": 15, "latitude": position.coords.latitude, "longitude": position.coords.longitude, "accuracy": ""};
-	// 	console.log(params);
-	// 	DGGeofencing.addRegion(
-	// 		params,
-	// 		function(result) { 
-	// 			console.log("add success");
-	// 			var region = new Region();
-	// 			region.fid = params.fid;
-	// 			region.name = currentLandL;
-	// 			region.accuracy = 0;
-	// 			region.radius = 15;
-	// 			region.address = currentLandL;
-	// 			region.latitude = position.coords.latitude;
-	// 			region.longitude = position.coords.longitude;
-	// 			region.currentlyHere = "yes";
-	// 		    persistence.add(region); 
-	// 		    persistence.flush(function() {
-	// 				var regions = Region.all(); // Returns QueryCollection of all Projects in Database
-	// 				regions.list(null, function (results) {
-	// 					var list = $( "#mainPage" ).find( ".lstMyRegions" );
-	// 					//Empty current list
-	// 			        list.empty();
-	// 					//Use template to create items & add to list
-	// 					$( "#regionItem" ).tmpl( results ).appendTo( list );
-	// 					//Call the listview jQuery UI Widget after adding 
-	// 					//items to the list allowing correct rendering
-	// 					list.listview( "refresh" );
-	// 				});	
-	// 				$.mobile.hidePageLoadingMsg();
-	// 			});   
-	//       	},
-	//       	function(error) {   
-	// 	  		alert("failed to add region");
-	//       	}
-	// 	);
-	// 	
-	// 	
-	// 	return;
 	
 	var parameters = {
 		ll: currentLandL, 
@@ -210,7 +168,12 @@ function doAddLocation(location) {
 			region.address = currentLocation.location.address;
 			region.latitude = currentLocation.location.lat;
 			region.longitude = currentLocation.location.lng;
-			region.currentlyHere = "yes";
+			var here = confirm('Are you already at ' + currentLocation.name + '?');
+			if(here) {
+				region.currentlyHere = "yes";
+			} else {
+				region.currentlyHere = "no";
+			}
 		    persistence.add(region); 
 		    persistence.flush(function() {
 				console.log("persistence flush success");

@@ -38,6 +38,9 @@ var DGGeofencing = {
 		return PhoneGap.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
 	},
 	
+	/* 
+	This is used so the JavaScript can be updated when a region is entered or exited
+	*/
 	regionMonitorUpdate: function(regionupdate) {
 		console.log("regionMonitorUpdate: " + regionupdate);
 		var ev = document.createEvent('HTMLEvents');
