@@ -211,9 +211,10 @@
     NSString *regionId = [params objectForKey:KEY_REGION_ID];
     NSString *latitude = [params objectForKey:KEY_REGION_LAT];
     NSString *longitude = [params objectForKey:KEY_REGION_LNG];
+    double radius = [[params objectForKey:KEY_REGION_RADIUS] doubleValue];
     
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-    CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:10.0 identifier:regionId];
+    CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:radius identifier:regionId];
     [self.locationManager startMonitoringForRegion:region desiredAccuracy:kCLLocationAccuracyBestForNavigation];
     [region release];
 }

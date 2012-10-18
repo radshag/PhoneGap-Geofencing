@@ -154,7 +154,7 @@ function doAddLocation(location) {
 
 	console.log("add");
 	// Send Add to Native Code for Region Monitoring
-	var params = {"fid": location.id, "radius": 15, "latitude": location.location.lat, "longitude": location.location.lng, "accuracy": ""};
+	var params = {"fid": location.id, "radius": 15, "latitude": location.location.lat, "longitude": location.location.lng};
 	console.log(params);
 	DGGeofencing.addRegion(
 		params,
