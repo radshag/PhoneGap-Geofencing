@@ -105,9 +105,15 @@ Follow these steps to setup region notifications:
 	
 	[[DGGeofencingHelper sharedGeofencingHelper] setWebView:self.webView];
 
-3. Add the following import to the MainViewController.m file.
+3. Make sure to import DGGeofencingHelper.h in the MainViewController.m file.
+4. In your JavaScript add the following code in the same place where you process the documentReady event.
 
-	#import "DGGeofencingHelper.h"
+	document.addEventListener('region-update', function(event) {
+			var fid = event.regionupdate.fid;
+			var status = event.regionupdate.status;
+			
+	    });
+	
 
 
 
