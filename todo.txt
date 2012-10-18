@@ -19,38 +19,3 @@ extern const CLLocationAccuracy kCLLocationAccuracyHundredMeters;
 extern const CLLocationAccuracy kCLLocationAccuracyKilometer;
 extern const CLLocationAccuracy kCLLocationAccuracyThreeKilometers;
 
-
-
-Fix how region alerts are sent to the javascript - 
-// Event spawned when a notification is received while the application is active
-PushNotification.prototype.notificationCallback = function(notification) {
-	var ev = document.createEvent('HTMLEvents');
-	ev.notification = notification;
-	ev.initEvent('push-notification', true, true, arguments);
-	document.dispatchEvent(ev);
-};
-
-
-Common Pitfalls 
-
-Don't forget to add your plugin's mapping to Cordova.plist - if you forgot, an error will be printed to the Xcode console log
-Don't forget to add any hosts you connect to in the whitelist - if you forgot, an error will be printed to the Xcode console log
-If you handle the resume event, and the app resumes, you can hang the app if you send out a JavaScript call that executes a native function, like alerts. To be safe, wrap your JavaScript call in a setTimeout call, with a timeout value of zero:
-
-setTimeout(function() {
-    // do your thing here!
-}, 0);
-
-// Set this to your FourSquare API Key and Secret
-var fsAPI_KEY = "1OYPMZW55HEI5CHOJ0AH4EGJATOF0TQD3Z03PRNAJZIKWTPM";
-var fsAPI_SECRET = "HG4IHVAI4E01RFR135PLJ5TERNKYTDAGQWG0VUSRWEGIKLIG";
-
-
-DGGeofencing.getWatchedRegionIds( 
-	function(result) {
-    	console.log(result);
-    },
-    function(error) {   
-    	console.log("error");
-    }
-);
