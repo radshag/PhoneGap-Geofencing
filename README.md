@@ -42,11 +42,10 @@ The parameters are:
 2. radius - Integer - Specifies the radius in meters of the region.
 3. latitude - String - latitude of the region.
 4. longitude - String - latitude of the region.
-5. accuracy - TODO.
 
 Example:
 
-    var params = {"fid": location.id, "radius": 15, "latitude": location.lat, "longitude": location.lng, "accuracy": ""};
+    var params = {"fid": location.id, "radius": 15, "latitude": location.lat, "longitude": location.lng};
 	console.log(params);
 	DGGeofencing.addRegion(
 		params,
@@ -117,6 +116,8 @@ Follow these steps to setup region notifications:
 
 Feel free to take a look at a project I have made that uses the above plugin.
 You can find this project in my github repository [Phonegap-Geofencing](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/Sample). 
+
+## LICENSE ##
 
 The MIT License
 
