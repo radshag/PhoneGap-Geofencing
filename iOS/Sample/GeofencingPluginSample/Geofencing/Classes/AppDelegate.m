@@ -55,8 +55,16 @@
  * This is main kick off after the app inits, the views and Settings are setup here. (preferred - iOS4 and up)
  */
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
-{    
+{
     NSURL* url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
+    
+    UILocalNotification* notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (notification) {
+        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:YES];
+    } else {
+        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
+    }
+    
     NSString* invokeString = nil;
     
     if (url && [url isKindOfClass:[NSURL class]]) {

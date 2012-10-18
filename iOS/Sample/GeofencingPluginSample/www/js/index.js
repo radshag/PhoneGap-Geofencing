@@ -37,7 +37,6 @@ var app = {
 		                if(status == "enter") {
 							item.currentlyHere = "yes";
 						} else {
-							alert("no");
 							item.currentlyHere = "no";
 						}
 					}
@@ -154,7 +153,7 @@ function doAddLocation(location) {
 
 	console.log("add");
 	// Send Add to Native Code for Region Monitoring
-	var params = {"fid": location.id, "radius": 15, "latitude": location.location.lat, "longitude": location.location.lng};
+	var params = {"fid": location.id, "radius": 10, "latitude": location.location.lat, "longitude": location.location.lng};
 	console.log(params);
 	DGGeofencing.addRegion(
 		params,
