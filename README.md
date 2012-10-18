@@ -109,10 +109,9 @@ Follow these steps to setup region notifications:
 4. In your JavaScript add the following code in the same place where you process the documentReady event.
 
 	document.addEventListener('region-update', function(event) {
-			var fid = event.regionupdate.fid;
-			var status = event.regionupdate.status;
-			
-	    });
+		var fid = event.regionupdate.fid;
+		var status = event.regionupdate.status;
+	});
 	
 
 
