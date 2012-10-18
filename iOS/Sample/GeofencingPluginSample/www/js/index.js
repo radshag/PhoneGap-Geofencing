@@ -27,12 +27,18 @@ var app = {
     // `load`, `deviceready`, `offline`, and `online`.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+	    document.addEventListener('region-update', function(event) {
+	        console.log('region-update!:%o', event);
+			console.log(event.regionupdate.status);
+	    });
     },
     // deviceready Event Handler
     //
     // The scope of `this` is the event. In order to call the `receivedEvent`
     // function, we must explicity call `app.receivedEvent(...);`
     onDeviceReady: function() {
+		var exec = cordova.require('cordova/exec');
+	    exec.setJsToNativeBridgeMode(exec.jsToNativeModes.IFRAME_NAV);
         fsclient = new FourSquareClient(fsAPI_KEY, fsAPI_SECRET, "", true);
     }
 };
@@ -108,7 +114,7 @@ function doSelectLocation(id) {
             $(nearbyLocations).each(function(index, item){
 				if( id == item.id) {
 					currentLocation = item;
-                	doAddLocation();
+                	doAddLocation(item);
 					return;
 				}
 			});	
@@ -116,15 +122,17 @@ function doSelectLocation(id) {
 	});
 }
 
-function doAddLocation() {
+function doAddLocation(location) {
 	$.mobile.showPageLoadingMsg();
 
-
+	console.log("add");
 	// Send Add to Native Code for Region Monitoring
-	var params = {"fid": currentLocation.id, "radius": 15, "latitude": currentLocation.location.lat, "longitude": currentLocation.location.lng, "accuracy": ""};
+	var params = {"fid": location.id, "radius": 15, "latitude": location.location.lat, "longitude": location.location.lng, "accuracy": ""};
+	console.log(params);
 	DGGeofencing.addRegion(
 		params,
 		function(result) { 
+			console.log("add success");
 			var region = new Region();
 			region.fid = currentLocation.id;
 			region.name = currentLocation.name;
@@ -136,6 +144,7 @@ function doAddLocation() {
 			region.currentlyHere = "yes";
 		    persistence.add(region); 
 		    persistence.flush(function() {
+				console.log("persistence flush success");
 			  	$.mobile.changePage("#mainPage");	
 				$.mobile.hidePageLoadingMsg();
 			});   
@@ -149,7 +158,6 @@ function doAddLocation() {
 function deleteRegion(id) {
 	$.mobile.showPageLoadingMsg();
 	var regions = Region.all().filter("fid", '=', id);
-	console.log(regions);
 	regions.list(null, function (results) {
         $(results).each(function(index, item){
             if (id == item.fid) {

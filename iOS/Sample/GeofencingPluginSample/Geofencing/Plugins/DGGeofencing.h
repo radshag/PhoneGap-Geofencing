@@ -55,15 +55,18 @@ typedef NSInteger DGLocationAccuracy;
 - (BOOL) isRegionMonitoringAvailable;
 - (BOOL) isRegionMonitoringEnabled;
 - (void) saveGeofenceCallbackId:(NSString *) callbackId;
-- (void) addRegion:(NSMutableDictionary *)params;
-- (void) removeRegion:(NSMutableDictionary *)params;
+- (void) addRegionToMonitor:(NSMutableDictionary *)params;
+- (void) removeRegionToMonitor:(NSMutableDictionary *)params;
 
 - (void) returnLocationError: (NSUInteger) errorCode withMessage: (NSString*) message;
 - (void) returnRegionSuccess;
 
 #pragma mark Plugin Functions
-- (void)addRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-- (void)removeRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-- (void)getWatchedRegionIds:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
+- (void) addRegion:(CDVInvokedUrlCommand*)command;
+- (void) removeRegion:(CDVInvokedUrlCommand*)command;
+- (void) getWatchedRegionIds:(CDVInvokedUrlCommand*)command;
+//- (void)addRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
+//- (void)removeRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
+//- (void)getWatchedRegionIds:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
 
 @end

@@ -29,11 +29,19 @@ var DGGeofencing = {
      removeRegion: function(params, success, fail) {
           return PhoneGap.exec(success, fail, "DGGeofencing", "removeRegion", [params]);
      },
+
      /*
 	Params:
 	NONE
 	*/
 	getWatchedRegionIds: function(success, fail) {
 		return PhoneGap.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
+	},
+	
+	regionMonitorUpdate: function(regionupdate) {
+		var ev = document.createEvent('HTMLEvents');
+		ev.regionupdate = regionupdate;
+		ev.initEvent('region-update', true, true, arguments);
+		document.dispatchEvent(ev);
 	}
 };

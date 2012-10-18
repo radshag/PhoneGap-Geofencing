@@ -30,6 +30,8 @@
 
 #import <Cordova/CDVPlugin.h>
 
+#import "DGGeofencingHelper.h"
+
 
 @implementation AppDelegate
 
@@ -71,7 +73,9 @@
     self.viewController.wwwFolderName = @"www";
     self.viewController.startPage = @"index.html";
     self.viewController.invokeString = invokeString;
-
+    
+    [[DGGeofencingHelper sharedGeofencingHelper] setWebView:self.viewController.webView];
+    
     // NOTE: To control the view's frame size, override [self.viewController viewWillAppear:] in your view controller.
     
     // check whether the current orientation is supported: if it is, keep it, rather than forcing a rotation
@@ -104,6 +108,7 @@
         [[UIApplication sharedApplication] setStatusBarOrientation:newOrient];
     }
     
+    
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     
@@ -134,5 +139,11 @@
     NSUInteger supportedInterfaceOrientations = (1 << UIInterfaceOrientationPortrait) | (1 << UIInterfaceOrientationLandscapeLeft) | (1 << UIInterfaceOrientationLandscapeRight) | (1 << UIInterfaceOrientationPortraitUpsideDown);
     return supportedInterfaceOrientations;
 }
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    [[DGGeofencingHelper sharedGeofencingHelper] dispose];
+}
+
+
 
 @end

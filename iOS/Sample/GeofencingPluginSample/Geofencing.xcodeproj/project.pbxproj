@@ -43,6 +43,7 @@
 		30E1352710E2C1420031B30D /* Cordova.plist in Resources */ = {isa = PBXBuildFile; fileRef = 30E1352610E2C1420031B30D /* Cordova.plist */; };
 		30E5649213A7FCAF007403D8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30E5649113A7FCAF007403D8 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9528C71D162F42D400928C52 /* DGGeofencing.m in Sources */ = {isa = PBXBuildFile; fileRef = 9528C71C162F42D400928C52 /* DGGeofencing.m */; };
+		9528C75D1630788200928C52 /* DGGeofencingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9528C75C1630788200928C52 /* DGGeofencingHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,8 @@
 		8D1107310486CEB800E47090 /* Geofencing-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Geofencing-Info.plist"; path = "../Geofencing-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		9528C71B162F42D400928C52 /* DGGeofencing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGGeofencing.h; sourceTree = "<group>"; };
 		9528C71C162F42D400928C52 /* DGGeofencing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGGeofencing.m; sourceTree = "<group>"; };
+		9528C75B1630788200928C52 /* DGGeofencingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGGeofencingHelper.h; sourceTree = "<group>"; };
+		9528C75C1630788200928C52 /* DGGeofencingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGGeofencingHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +145,8 @@
 				302D95F014D2391D003F00A1 /* MainViewController.xib */,
 				1D3623240D0F684500981E51 /* AppDelegate.h */,
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
+				9528C75B1630788200928C52 /* DGGeofencingHelper.h */,
+				9528C75C1630788200928C52 /* DGGeofencingHelper.m */,
 			);
 			name = Classes;
 			path = Geofencing/Classes;
@@ -414,6 +419,7 @@
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				9528C71D162F42D400928C52 /* DGGeofencing.m in Sources */,
+				9528C75D1630788200928C52 /* DGGeofencingHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
