@@ -32,6 +32,30 @@ DGGeofencing.js contains the following functions:
 2. removeRegion - Clears an existing region from being monitored.
 3. getWatchedRegionIds - Returns a list of currently monitored region identifiers.
 
+## PLUGIN CODE EXAMPLE ##
+
+To add a new region to be monitored use the DGGeofencing addRegion function.
+The parameters are:
+1. fid - String - This is a unique identifier.
+2. radius - Integer - Specifies the radius in meters of the region.
+3. latitude - String - latitude of the region.
+4. longitude - String - latitude of the region.
+5. accuracy - TODO.
+
+Example:
+
+    var params = {"fid": location.id, "radius": 15, "latitude": location.lat, "longitude": location.lng, "accuracy": ""};
+	console.log(params);
+	DGGeofencing.addRegion(
+		params,
+		function(result) { 
+			console.log("add success");
+      	},
+      	function(error) {   
+	  		alert("failed to add region");
+      	}
+	);
+
 The MIT License
 
 Copyright (c) 2012 Dov Goldberg
