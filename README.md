@@ -65,16 +65,31 @@ The parameters are:
 
 Example:
 
-var params = {"fid": item.fid, "latitude": item.latitude, "longitude": item.longitude, };
-				DGGeofencing.removeRegion(
-					params,
-					function(result) { 
-						   
-			      	},
-			      	function(error) {  
-						alert("delete error")   
-			      	}
-				);
+	var params = {"fid": item.fid, "latitude": item.latitude, "longitude": item.longitude};
+	DGGeofencing.removeRegion(
+		params,
+		function(result) { 
+			alert("delete success") 				   
+		},
+		function(error) {  
+			alert("delete error");   
+		}
+	);
+
+To retrieve the list of identifiers of currently monitored regions use the DGGeofencing getWatchedRegionIds function.
+No parameters.
+
+Example:
+
+	DGGeofencing.removeRegion(
+		function(result) { 
+			alert("success") 				   
+		},
+		function(error) {  
+			alert("error");   
+		}
+	);
+	
 
 The MIT License
 
