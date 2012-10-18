@@ -36,6 +36,7 @@ DGGeofencing.js contains the following functions:
 
 To add a new region to be monitored use the DGGeofencing addRegion function.
 The parameters are:
+
 1. fid - String - This is a unique identifier.
 2. radius - Integer - Specifies the radius in meters of the region.
 3. latitude - String - latitude of the region.
@@ -55,6 +56,25 @@ Example:
 	  		alert("failed to add region");
       	}
 	);
+
+To remove an existing region use the DGGeofencing removeRegion function.
+The parameters are:
+1. fid - String - This is a unique identifier.
+2. latitude - String - latitude of the region.
+3. longitude - String - latitude of the region.
+
+Example:
+
+var params = {"fid": item.fid, "latitude": item.latitude, "longitude": item.longitude, };
+				DGGeofencing.removeRegion(
+					params,
+					function(result) { 
+						   
+			      	},
+			      	function(error) {  
+						alert("delete error")   
+			      	}
+				);
 
 The MIT License
 
