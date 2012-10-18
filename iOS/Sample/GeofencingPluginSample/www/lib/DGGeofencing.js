@@ -39,6 +39,7 @@ var DGGeofencing = {
 	},
 	
 	regionMonitorUpdate: function(regionupdate) {
+		console.log("regionMonitorUpdate: " + regionupdate);
 		var ev = document.createEvent('HTMLEvents');
 		ev.regionupdate = regionupdate;
 		ev.initEvent('region-update', true, true, arguments);

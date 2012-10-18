@@ -74,8 +74,6 @@
     self.viewController.startPage = @"index.html";
     self.viewController.invokeString = invokeString;
     
-    [[DGGeofencingHelper sharedGeofencingHelper] setWebView:self.viewController.webView];
-    
     // NOTE: To control the view's frame size, override [self.viewController viewWillAppear:] in your view controller.
     
     // check whether the current orientation is supported: if it is, keep it, rather than forcing a rotation

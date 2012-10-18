@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <Cordova/JSONKit.h>
 
 @class CDVCordovaView;
 @interface DGGeofencingHelper : NSObject <CLLocationManagerDelegate>

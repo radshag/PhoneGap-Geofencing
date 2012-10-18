@@ -21,7 +21,7 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:@"enter" forKey:@"status"];
     [dict setObject:region.identifier forKey:@"fid"];
-    NSString *jsStatement = [NSString stringWithFormat:@"DGGeofencing.regionMonitorUpdate(%@);", dict];
+    NSString *jsStatement = [NSString stringWithFormat:@"DGGeofencing.regionMonitorUpdate(%@);", [dict cdvjk_JSONString]];
     [self.webView stringByEvaluatingJavaScriptFromString:jsStatement];
 }
 
@@ -30,7 +30,7 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:@"left" forKey:@"status"];
     [dict setObject:region.identifier forKey:@"fid"];
-    NSString *jsStatement = [NSString stringWithFormat:@"DGGeofencing.regionMonitorUpdate(%@);", dict];
+    NSString *jsStatement = [NSString stringWithFormat:@"DGGeofencing.regionMonitorUpdate(%@);", [dict cdvjk_JSONString]];
     [self.webView stringByEvaluatingJavaScriptFromString:jsStatement];
 }
 

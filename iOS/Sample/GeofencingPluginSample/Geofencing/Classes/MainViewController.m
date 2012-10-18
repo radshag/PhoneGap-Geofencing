@@ -26,6 +26,7 @@
 //
 
 #import "MainViewController.h"
+#import "DGGeofencingHelper.h"
 
 @implementation MainViewController
 
@@ -60,6 +61,8 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[DGGeofencingHelper sharedGeofencingHelper] setWebView:self.webView];
     // Do any additional setup after loading the view from its nib.
 }
 
