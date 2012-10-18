@@ -133,7 +133,7 @@ function doAddLocation() {
 			region.address = currentLocation.location.address;
 			region.latitude = currentLocation.location.lat;
 			region.longitude = currentLocation.location.lng;
-			region.currentlyHere = true;
+			region.currentlyHere = "yes";
 		    persistence.add(region); 
 		    persistence.flush(function() {
 			  	$.mobile.changePage("#mainPage");	
@@ -159,7 +159,17 @@ function deleteRegion(id) {
 					function(result) { 
 						persistence.remove(item);
 						persistence.flush(function() {
-						  	$.mobile.changePage("#mainPage");	
+                            var regions = Region.all(); // Returns QueryCollection of all Projects in Database
+							regions.list(null, function (results) {
+								var list = $( "#mainPage" ).find( ".lstMyRegions" );
+								//Empty current list
+						        list.empty();
+								//Use template to create items & add to list
+								$( "#regionItem" ).tmpl( results ).appendTo( list );
+								//Call the listview jQuery UI Widget after adding 
+								//items to the list allowing correct rendering
+								list.listview( "refresh" );
+							});
 							$.mobile.hidePageLoadingMsg();
 						});    
 			      	},
@@ -175,11 +185,11 @@ function deleteRegion(id) {
 }
     
 function showMapForLocation(id) {
-//        $(nearbyLocations).each(function(index, item){
-//			if( id == item.id) {
-//				currentLocation = item;
-//				$.mobile.changePage("#map_page");
-//				return;
-//			}
-//		});
+        $(nearbyLocations).each(function(index, item){
+			if( id == item.id) {
+				currentLocation = item;
+				$.mobile.changePage("#map_page");
+				return;
+			}
+		});
 }

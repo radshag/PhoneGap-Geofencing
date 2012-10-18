@@ -9,7 +9,7 @@ var Region = persistence.define('Region', {
   radius: "INT",
   latitude: "TEXT",
   longitude: "TEXT",
-  currentlyHere: "BOOL",
+  currentlyHere: "TEXT",
   address: "TEXT",
   name: "TEXT"
 });
