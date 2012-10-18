@@ -7,6 +7,7 @@ Geofencing Plugin For PhoneGap.
 
 * This plugin provides a simple way to use iOS Region Monitoring in PhoneGap applications.
 * Simple JS interface is exposed to allow the adding and removing of regions to monitor.
+* Included ability to receive realtime region notifications when regions are entered and exited.
 
 ## WHAT IS GEOFENCING ##
 
@@ -79,17 +80,22 @@ Example:
 To retrieve the list of identifiers of currently monitored regions use the DGGeofencing getWatchedRegionIds function.
 No parameters.
 
+The result object contains an array of strings in regionids 
+
 Example:
 
-	DGGeofencing.removeRegion(
+	DGGeofencing.getWatchedRegionIds(
 		function(result) { 
-			alert("success") 				   
+			alert("success: " + result.regionids) 				   
 		},
 		function(error) {  
 			alert("error");   
 		}
 	);
 	
+## HOW TO SETUP REGION NOTIFICATIONS ##
+
+
 
 The MIT License
 
