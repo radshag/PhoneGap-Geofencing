@@ -49,6 +49,14 @@ var fsAPI_KEY = "1OYPMZW55HEI5CHOJ0AH4EGJATOF0TQD3Z03PRNAJZIKWTPM";
 var fsAPI_SECRET = "HG4IHVAI4E01RFR135PLJ5TERNKYTDAGQWG0VUSRWEGIKLIG";
 
 function retrieveLocations() {
+    DGGeofencing.getWatchedRegionIds( 
+		function(result) {
+        	console.log(result);
+        },
+        function(error) {   
+        	console.log("error");
+        }
+    );
 	$.mobile.showPageLoadingMsg();
 	navigator.geolocation.getCurrentPosition(onRetrieveLocationSuccess, onRetrieveLocationError);
 }

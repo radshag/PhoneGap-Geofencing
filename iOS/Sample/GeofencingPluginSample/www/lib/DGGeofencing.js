@@ -28,5 +28,12 @@ var DGGeofencing = {
 	*/
      removeRegion: function(params, success, fail) {
           return PhoneGap.exec(success, fail, "DGGeofencing", "removeRegion", [params]);
-     }
+     },
+     /*
+	Params:
+	NONE
+	*/
+	getWatchedRegionIds: function(success, fail) {
+		return PhoneGap.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
+	}
 };

@@ -281,6 +281,26 @@
     [self returnRegionSuccess];
 }
 
+- (void)getWatchedRegionIds:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options {
+    NSUInteger argc = [arguments count];
+    NSString* callbackId = (argc > 0)? [arguments objectAtIndex:0] : @"INVALID";
+    
+    NSSet *regions = self.locationManager.monitoredRegions;
+    NSMutableArray *watchedRegions = [NSMutableArray array];
+    for (CLRegion *region in regions) {
+        [watchedRegions addObject:region.identifier];
+    }
+    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:3];
+    [posError setObject: [NSNumber numberWithInt: CDVCommandStatus_OK] forKey:@"code"];
+    [posError setObject: @"Region Success" forKey: @"message"];
+    [posError setObject: watchedRegions forKey: @"regionids"];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:posError];
+    if (callbackId) {
+        [super writeJavascript:[result toSuccessCallbackString:callbackId]];
+    }
+    NSLog(@"watchedRegions: %@", watchedRegions);
+}
+
 #pragma mark Core Location Delegates
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
