@@ -193,7 +193,7 @@ function deleteRegion(id) {
 	regions.list(null, function (results) {
         $(results).each(function(index, item){
             if (id == item.fid) {
-                var params = {"fid": item.fid, "latitude": item.latitude, "longitude": item.longitude, };
+                var params = {"fid": item.fid, "latitude": item.latitude, "longitude": item.longitude};
 				DGGeofencing.removeRegion(
 					params,
 					function(result) { 
