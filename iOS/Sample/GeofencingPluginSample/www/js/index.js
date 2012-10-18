@@ -49,14 +49,6 @@ var fsAPI_KEY = "1OYPMZW55HEI5CHOJ0AH4EGJATOF0TQD3Z03PRNAJZIKWTPM";
 var fsAPI_SECRET = "HG4IHVAI4E01RFR135PLJ5TERNKYTDAGQWG0VUSRWEGIKLIG";
 
 function retrieveLocations() {
-    DGGeofencing.getWatchedRegionIds( 
-		function(result) {
-        	console.log(result);
-        },
-        function(error) {   
-        	console.log("error");
-        }
-    );
 	$.mobile.showPageLoadingMsg();
 	navigator.geolocation.getCurrentPosition(onRetrieveLocationSuccess, onRetrieveLocationError);
 }
@@ -141,7 +133,7 @@ function doAddLocation() {
 			region.address = currentLocation.location.address;
 			region.latitude = currentLocation.location.lat;
 			region.longitude = currentLocation.location.lng;
-			region.currentlyHere = false;
+			region.currentlyHere = true;
 		    persistence.add(region); 
 		    persistence.flush(function() {
 			  	$.mobile.changePage("#mainPage");	
@@ -152,7 +144,34 @@ function doAddLocation() {
 	  		alert("failed to add region");
       	}
 	);
+}
 
+function deleteRegion(id) {
+	$.mobile.showPageLoadingMsg();
+	var regions = Region.all().filter("fid", '=', id);
+	console.log(regions);
+	regions.list(null, function (results) {
+        $(results).each(function(index, item){
+            if (id == item.fid) {
+                var params = {"fid": item.fid, "latitude": item.latitude, "longitude": item.longitude, };
+				DGGeofencing.removeRegion(
+					params,
+					function(result) { 
+						persistence.remove(item);
+						persistence.flush(function() {
+						  	$.mobile.changePage("#mainPage");	
+							$.mobile.hidePageLoadingMsg();
+						});    
+			      	},
+			      	function(error) {  
+						alert("delete error")
+						$.mobile.hidePageLoadingMsg();    
+			      	}
+				);
+			}
+        });
+	});
+	$.mobile.hidePageLoadingMsg();
 }
     
 function showMapForLocation(id) {
