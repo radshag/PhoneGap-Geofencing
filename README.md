@@ -103,18 +103,20 @@ Follow these steps to setup region notifications:
 1. Drag and drop the DGGeofencingHelper.h and DGGeofencingHelper.m files from the DGGeofencing folder in Finder to your Plugins folder in XCode.
 2. Add the following code to the viewDidLoad function in the MainViewController.m file after [super viewDidLoad];
 	
-	[[DGGeofencingHelper sharedGeofencingHelper] setWebView:self.webView];
+	<pre>[[DGGeofencingHelper sharedGeofencingHelper] setWebView:self.webView];</pre>
 
 3. Make sure to import DGGeofencingHelper.h in the MainViewController.m file.
 4. In your JavaScript add the following code in the same place where you process the documentReady event.
 
-	document.addEventListener('region-update', function(event) {
+	<pre>document.addEventListener("region-update", function(event) {
 		var fid = event.regionupdate.fid;
 		var status = event.regionupdate.status;
-	});
+	});</pre>
 	
+## USAGE SAMPLE CODE ##
 
-
+Feel free to take a look at a project I have made that uses the above plugin.
+You can find this project in my github repository [Phonegap-Geofencing](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/Sample). 
 
 The MIT License
 
