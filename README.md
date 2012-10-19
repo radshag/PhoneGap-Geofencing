@@ -97,7 +97,7 @@ Example:
 Of course adding and removing monitored regions would be useless without the ability to receive real time notifications when region boundries are crossed.
 This setup will allow the JavaScript to receive updates both when the app is running and not running.
 
-Follow these steps to setup region notifications:
+Follow these steps to setup region notifications when the app is running:
 
 1. Drag and drop the DGGeofencingHelper.h and DGGeofencingHelper.m files from the DGGeofencing folder in Finder to your Plugins folder in XCode.
 2. Add the following code to the viewDidLoad function in the MainViewController.m file after [super viewDidLoad];
@@ -111,6 +111,35 @@ Follow these steps to setup region notifications:
 		var fid = event.regionupdate.fid;
 		var status = event.regionupdate.status;
 	});</pre>
+
+When the app is not running, even in the background,  region notifications are saved as they come in.
+In order to retrieve these pending region notifications follow these instructions.
+
+1. Add the following code in the app delegate - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+
+<pre>    UILocalNotification* notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (notification) {
+        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:YES];
+    } else {
+        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
+    }</pre>
+
+2. In the JavaScript you will need to use the following code to retrieve these notifications.
+
+    <pre>    DGGeofencing.getPendingRegionUpdates(
+			function(result) { 
+				var updates = result.pendingupdates;
+				$(updates).each(function(index, update){
+					var fid = update.fid;
+					var status = update.status;
+					var timestamp = update.timestamp;
+					console.log("fid: " + fid + " status: " + status + " timestamp: " + timestamp);
+				});   
+	      	},
+	      	function(error) {   
+		  		alert("failed");
+	      	}
+		);</pre>
 	
 ## USAGE SAMPLE CODE ##
 
