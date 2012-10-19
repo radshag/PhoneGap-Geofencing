@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) CLLocationManager *locationManager;
 @property (nonatomic, assign) CDVCordovaView *webView;
+@property (nonatomic, assign) BOOL didLaunchForRegionUpdate;
 
 +(DGGeofencingHelper*)sharedGeofencingHelper;
 

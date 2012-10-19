@@ -206,14 +206,40 @@
     [self returnRegionSuccess];
 }
 
+- (void) getPendingRegionUpdates:(CDVInvokedUrlCommand*)command {
+    NSString* callbackId = command.callbackId;
+    
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath = [path stringByAppendingPathComponent:@"notifications.dg"];
+    NSMutableArray *updates = [NSMutableArray arrayWithContentsOfFile:finalPath];
+    
+    if (updates) {
+        NSError *error;
+        [[NSFileManager defaultManager] removeItemAtPath:finalPath error:&error];
+    } else {
+        updates = [NSMutableArray array];
+    }
+    
+    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:3];
+    [posError setObject: [NSNumber numberWithInt: CDVCommandStatus_OK] forKey:@"code"];
+    [posError setObject: @"Region Success" forKey: @"message"];
+    [posError setObject: updates forKey: @"pendingupdates"];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:posError];
+    if (callbackId) {
+        [self writeJavascript:[result toSuccessCallbackString:callbackId]];
+    }
+    NSLog(@"pendingupdates: %@", updates);
+}
+
 - (void) addRegionToMonitor:(NSMutableDictionary *)params {
     // Parse Incoming Params
     NSString *regionId = [params objectForKey:KEY_REGION_ID];
     NSString *latitude = [params objectForKey:KEY_REGION_LAT];
     NSString *longitude = [params objectForKey:KEY_REGION_LNG];
+    double radius = [[params objectForKey:KEY_REGION_RADIUS] doubleValue];
     
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-    CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:10.0 identifier:regionId];
+    CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:radius identifier:regionId];
     [self.locationManager startMonitoringForRegion:region desiredAccuracy:kCLLocationAccuracyBestForNavigation];
     [region release];
 }

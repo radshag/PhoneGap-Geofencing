@@ -38,6 +38,14 @@ var DGGeofencing = {
 		return PhoneGap.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
 	},
 	
+	/*
+	Params:
+	NONE
+	*/
+	getPendingRegionUpdates: function(success, fail) {
+		return PhoneGap.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
+	},
+	
 	/* 
 	This is used so the JavaScript can be updated when a region is entered or exited
 	*/
