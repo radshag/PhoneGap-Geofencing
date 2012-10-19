@@ -70,9 +70,11 @@ var app = {
 				                if(status == "enter") {
 									item.currentlyHere = "yes";
 									alert("entered: " + item.name);
+									console("entered: " + item.name);
 								} else {
 									item.currentlyHere = "no";
 									alert("exited: " + item.name);
+									console("exited: " + item.name);
 								}
 							}
 				        });
