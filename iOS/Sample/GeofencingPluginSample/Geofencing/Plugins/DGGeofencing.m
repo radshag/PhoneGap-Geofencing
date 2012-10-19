@@ -206,6 +206,31 @@
     [self returnRegionSuccess];
 }
 
+- (void) getPendingRegionUpdates:(CDVInvokedUrlCommand*)command {
+    NSString* callbackId = command.callbackId;
+    
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath = [path stringByAppendingPathComponent:@"notifications.dg"];
+    NSMutableArray *updates = [NSMutableArray arrayWithContentsOfFile:finalPath];
+    
+    if (updates) {
+        NSError *error;
+        [[NSFileManager defaultManager] removeItemAtPath:finalPath error:&error];
+    } else {
+        updates = [NSMutableArray array];
+    }
+    
+    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:3];
+    [posError setObject: [NSNumber numberWithInt: CDVCommandStatus_OK] forKey:@"code"];
+    [posError setObject: @"Region Success" forKey: @"message"];
+    [posError setObject: updates forKey: @"pendingupdates"];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:posError];
+    if (callbackId) {
+        [self writeJavascript:[result toSuccessCallbackString:callbackId]];
+    }
+    NSLog(@"pendingupdates: %@", updates);
+}
+
 - (void) addRegionToMonitor:(NSMutableDictionary *)params {
     // Parse Incoming Params
     NSString *regionId = [params objectForKey:KEY_REGION_ID];

@@ -65,6 +65,14 @@
         [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
     }
     
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath = [path stringByAppendingPathComponent:@"notifications.dg"];
+    NSMutableArray *updates = [NSMutableArray arrayWithContentsOfFile:finalPath];
+    
+    if (!updates) {
+        updates = [NSMutableArray array];
+    }
+    
     NSString* invokeString = nil;
     
     if (url && [url isKindOfClass:[NSURL class]]) {

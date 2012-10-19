@@ -15,21 +15,18 @@ var Region = persistence.define('Region', {
 });
 
 $('#mainPage').live("pageshow", function() {
-	// Load Current Projects from WebSQL Database and refresh Listview
-    persistence.store.websql.config(persistence, 'regiontracker', 'Region Tracker DB', 5 * 1024 * 1024);
-	persistence.schemaSync(function(tx) { 
-		var regions = Region.all(); // Returns QueryCollection of all Projects in Database
-		regions.list(null, function (results) {
-			var list = $( "#mainPage" ).find( ".lstMyRegions" );
-			//Empty current list
-	        list.empty();
-			//Use template to create items & add to list
-			$( "#regionItem" ).tmpl( results ).appendTo( list );
-			//Call the listview jQuery UI Widget after adding 
-			//items to the list allowing correct rendering
-			list.listview( "refresh" );
-		});
-	});                
+	console.log("page show");
+	var regions = Region.all(); // Returns QueryCollection of all Projects in Database
+	regions.list(null, function (results) {
+		var list = $( "#mainPage" ).find( ".lstMyRegions" );
+		//Empty current list
+        list.empty();
+		//Use template to create items & add to list
+		$( "#regionItem" ).tmpl( results ).appendTo( list );
+		//Call the listview jQuery UI Widget after adding 
+		//items to the list allowing correct rendering
+		list.listview( "refresh" );
+	});	              
 });
 
 $('#projectOptions').live("pageshow", function() {

@@ -65,6 +65,7 @@ typedef NSInteger DGLocationAccuracy;
 - (void) addRegion:(CDVInvokedUrlCommand*)command;
 - (void) removeRegion:(CDVInvokedUrlCommand*)command;
 - (void) getWatchedRegionIds:(CDVInvokedUrlCommand*)command;
+- (void) getPendingRegionUpdates:(CDVInvokedUrlCommand*)command;
 //- (void)addRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
 //- (void)removeRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
 //- (void)getWatchedRegionIds:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
