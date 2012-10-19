@@ -146,6 +146,10 @@ In order to retrieve these pending region notifications follow these instruction
 Feel free to take a look at a project I have made that uses the above plugin.
 You can find this project in my github repository [Phonegap-Geofencing](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/Sample). 
 
+## QUESTIONS AND COMMENTS ##
+
+All questions and comments are welcome.  Please do so on my [GitHub Page](https://github.com/radshag/PhoneGap-Geofencing/issues).
+
 ## LICENSE ##
 
 The MIT License
