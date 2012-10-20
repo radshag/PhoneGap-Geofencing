@@ -30,11 +30,11 @@
 
 #import <Cordova/CDVPlugin.h>
 
-
+#import "DGGeofencingHelper.h"
 
 @implementation AppDelegate
 
-@synthesize window, viewController, geofencingHelper;
+@synthesize window, viewController;
 
 - (id) init
 {	
@@ -57,13 +57,10 @@
 {
     NSURL* url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     
-    self.geofencingHelper = [DGGeofencingHelper sharedGeofencingHelper];
-    
-    //UILocalNotification* notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey];
     if ([[launchOptions allKeys] containsObject:UIApplicationLaunchOptionsLocationKey]) {
-        [self.geofencingHelper setDidLaunchForRegionUpdate:YES];
+        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:YES];
     } else {
-        [self.geofencingHelper setDidLaunchForRegionUpdate:NO];
+        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
     }
     
     NSString *path = [[NSBundle mainBundle] bundlePath];

@@ -28,7 +28,6 @@
 #import <UIKit/UIKit.h>
 
 #import <Cordova/CDVViewController.h>
-#import "DGGeofencingHelper.h"
 
 @interface AppDelegate : NSObject < UIApplicationDelegate > {
 
@@ -41,7 +40,6 @@
 
 @property (nonatomic, strong) IBOutlet UIWindow* window;
 @property (nonatomic, strong) IBOutlet CDVViewController* viewController;
-@property (nonatomic, retain) DGGeofencingHelper *geofencingHelper;
 
 @end
 

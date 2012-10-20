@@ -20,7 +20,7 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
 - (void) locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
     if (self.didLaunchForRegionUpdate) {
-        NSString *path = [[NSBundle mainBundle] bundlePath];
+        NSString *path = [DGGeofencingHelper applicationDocumentsDirectory];
         NSString *finalPath = [path stringByAppendingPathComponent:@"notifications.dg"];
         NSMutableArray *updates = [NSMutableArray arrayWithContentsOfFile:finalPath];
         
@@ -49,7 +49,7 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
 - (void) locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
     if (self.didLaunchForRegionUpdate) {
-        NSString *path = [[NSBundle mainBundle] bundlePath];
+        NSString *path = [DGGeofencingHelper applicationDocumentsDirectory];
         NSString *finalPath = [path stringByAppendingPathComponent:@"notifications.dg"];
         NSMutableArray *updates = [NSMutableArray arrayWithContentsOfFile:finalPath];
         
@@ -76,6 +76,7 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
+#pragma mark TODO - Monitoring Failure Callback
 //    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
 //    [posError setObject: [NSNumber numberWithInt: error.code] forKey:@"code"];
 //    [posError setObject: region.identifier forKey: @"regionid"];
@@ -84,11 +85,6 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
 //    if (callbackId) {
 //        [self writeJavascript:[result toErrorCallbackString:callbackId]];
 //    }
-}
-
-- (void)locationManager:(CLLocationManager *)manager
-       didFailWithError:(NSError *)error {
-    [self writeJavascript:[NSString stringWithFormat:@"Error: %@", error.description]];
 }
 
 - (id) init {
@@ -117,6 +113,13 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     locationManager.delegate = nil;
     [locationManager release];
     [sharedGeofencingHelper release];
+}
+
++ (NSString*) applicationDocumentsDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    return basePath;
 }
 
 @end

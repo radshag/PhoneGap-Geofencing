@@ -36,6 +36,65 @@ var app = {
         fsclient = new FourSquareClient(fsAPI_KEY, fsAPI_SECRET, "", true);
 
 		console.log("doc ready");
+		
+		persistence.store.websql.config(persistence, 'regiontracker', 'Region Tracker DB', 5 * 1024 * 1024);
+		persistence.schemaSync(function(tx) { 
+			console.log("check for pending region updates");
+
+			DGGeofencing.getWatchedRegionIds(
+				function(result) { 
+					var regionids = result.regionids;
+					console.log("regionids: " + regionids);
+				},
+				function(error) {   
+					console.log("failed to add region");
+				}
+			);
+			
+			DGGeofencing.getPendingRegionUpdates(
+				function(result) { 
+					var updates = result.pendingupdates;
+					$(updates).each(function(index, update){
+						var fid = update.fid;
+						var status = update.status;
+						var timestamp = update.timestamp;
+						console.log("fid: " + fid + " status: " + status + " timestamp: " + timestamp);
+
+						var regions = Region.all().filter("fid", '=', fid);
+						regions.list(null, function (results) {
+					        $(results).each(function(index, item){
+					            if (fid == item.fid) {
+					                if(status == "enter") {
+										item.currentlyHere = "yes";
+										console("entered: " + item.name);
+									} else {
+										item.currentlyHere = "no";
+										console("exited: " + item.name);
+									}
+								}
+					        });
+						});
+
+						persistence.flush(function() {
+							var regions = Region.all(); // Returns QueryCollection of all Projects in Database
+							regions.list(null, function (results) {
+								var list = $( "#mainPage" ).find( ".lstMyRegions" );
+								//Empty current list
+						        list.empty();
+								//Use template to create items & add to list
+								$( "#regionItem" ).tmpl( results ).appendTo( list );
+								//Call the listview jQuery UI Widget after adding 
+								//items to the list allowing correct rendering
+								list.listview( "refresh" );
+							});	
+						});
+					});   
+		      	},
+		      	function(error) {   
+			  		console.log("failed to add region");
+		      	}
+			);
+		});
 
 		document.addEventListener('region-update', function(event) {
 			var fid = event.regionupdate.fid;

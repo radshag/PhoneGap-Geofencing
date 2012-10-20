@@ -117,12 +117,11 @@ In order to retrieve these pending region notifications follow these instruction
 
 1. Add the following code in the app delegate - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 
-<pre>    UILocalNotification* notification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    if (notification) {
-        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:YES];
-    } else {
-        [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
-    }</pre>
+<pre>    if ([[launchOptions allKeys] containsObject:UIApplicationLaunchOptionsLocationKey]) {
+    [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:YES];
+} else {
+    [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
+}</pre>
 
 2. In the JavaScript you will need to use the following code to retrieve these notifications.
 

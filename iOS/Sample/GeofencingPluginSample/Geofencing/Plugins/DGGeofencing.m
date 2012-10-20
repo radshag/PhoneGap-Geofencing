@@ -7,6 +7,7 @@
 //
 
 #import "DGGeofencing.h"
+#import <Cordova/CDVViewController.h>
 
 @implementation DGLocationData
 
@@ -209,7 +210,7 @@
 - (void) getPendingRegionUpdates:(CDVInvokedUrlCommand*)command {
     NSString* callbackId = command.callbackId;
     
-    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSString *path = [DGGeofencingHelper applicationDocumentsDirectory];
     NSString *finalPath = [path stringByAppendingPathComponent:@"notifications.dg"];
     NSMutableArray *updates = [NSMutableArray arrayWithContentsOfFile:finalPath];
     
