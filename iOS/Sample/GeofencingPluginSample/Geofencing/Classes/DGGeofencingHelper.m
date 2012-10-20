@@ -75,10 +75,26 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     }
 }
 
+- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
+//    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
+//    [posError setObject: [NSNumber numberWithInt: error.code] forKey:@"code"];
+//    [posError setObject: region.identifier forKey: @"regionid"];
+//    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
+//    NSString *callbackId = [self.locationData.locationCallbacks dequeue];
+//    if (callbackId) {
+//        [self writeJavascript:[result toErrorCallbackString:callbackId]];
+//    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error {
+    [self writeJavascript:[NSString stringWithFormat:@"Error: %@", error.description]];
+}
+
 - (id) init {
     self = [super init];
     if (self) {
-        self.locationManager = [[[CLLocationManager alloc] init] autorelease];
+        self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self; // Tells the location manager to send updates to this object
     }
     return self;
