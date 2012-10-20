@@ -149,6 +149,8 @@ You can find this project in my github repository [Phonegap-Geofencing](https://
 
 All questions and comments are welcome.  Please do so on my [GitHub Page](https://github.com/radshag/PhoneGap-Geofencing/issues).
 
+The latest version of the DGGeofencing plugin can always be found [here](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/DGGeofencing).
+
 ## LICENSE ##
 
 The MIT License
