@@ -25,7 +25,8 @@ enum DGLocationStatus {
     POSITIONUNAVAILABLE,
     TIMEOUT,
     REGIONMONITORINGPERMISSIONDENIED,
-    REGIONMONITORINGUNAVAILABLE
+    REGIONMONITORINGUNAVAILABLE,
+    SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE
 };
 typedef NSInteger DGLocationStatus;
 
@@ -56,6 +57,7 @@ typedef NSInteger DGLocationAccuracy;
 - (BOOL) isAuthorized;
 - (BOOL) isRegionMonitoringAvailable;
 - (BOOL) isRegionMonitoringEnabled;
+- (BOOL) isSignificantLocationChangeMonitoringAvailable;
 - (void) saveGeofenceCallbackId:(NSString *) callbackId;
 - (void) addRegionToMonitor:(NSMutableDictionary *)params;
 - (void) removeRegionToMonitor:(NSMutableDictionary *)params;
@@ -68,8 +70,7 @@ typedef NSInteger DGLocationAccuracy;
 - (void) removeRegion:(CDVInvokedUrlCommand*)command;
 - (void) getWatchedRegionIds:(CDVInvokedUrlCommand*)command;
 - (void) getPendingRegionUpdates:(CDVInvokedUrlCommand*)command;
-//- (void)addRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-//- (void)removeRegion:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
-//- (void)getWatchedRegionIds:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
+- (void) startMonitoringSignificantLocationChanges:(CDVInvokedUrlCommand*)command;
+- (void) stopMonitoringSignificantLocationChanges:(CDVInvokedUrlCommand*)command;
 
 @end

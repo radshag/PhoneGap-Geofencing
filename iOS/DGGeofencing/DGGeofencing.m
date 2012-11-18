@@ -56,6 +56,19 @@
 	[super dealloc];
 }
 
+- (BOOL) isSignificantLocationChangeMonitoringAvailable
+{
+	BOOL significantLocationChangeMonitoringAvailablelassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(significantLocationChangeMonitoringAvailable)];
+    if (significantLocationChangeMonitoringAvailablelassPropertyAvailable)
+    {
+        BOOL significantLocationChangeMonitoringAvailable = [CLLocationManager significantLocationChangeMonitoringAvailable];
+        return  (significantLocationChangeMonitoringAvailable);
+    }
+    
+    // by default, assume NO
+    return NO;
+}
+
 - (BOOL) isRegionMonitoringAvailable
 {
 	BOOL regionMonitoringAvailableClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringAvailable)]; 
@@ -153,6 +166,97 @@
 }
 
 #pragma mark Plugin Functions
+
+- (void) startMonitoringSignificantLocationChanges:(CDVInvokedUrlCommand*)command {
+    NSString* callbackId = command.callbackId;
+    
+    [self saveGeofenceCallbackId:callbackId];
+    
+    if (![self isLocationServicesEnabled])
+	{
+		BOOL forcePrompt = NO;
+		if (!forcePrompt)
+		{
+            [self returnLocationError:PERMISSIONDENIED withMessage: nil];
+			return;
+		}
+    }
+    
+    if (![self isAuthorized])
+    {
+        NSString* message = nil;
+        BOOL authStatusAvailable = [CLLocationManager respondsToSelector:@selector(authorizationStatus)]; // iOS 4.2+
+        if (authStatusAvailable) {
+            NSUInteger code = [CLLocationManager authorizationStatus];
+            if (code == kCLAuthorizationStatusNotDetermined) {
+                // could return POSITION_UNAVAILABLE but need to coordinate with other platforms
+                message = @"User undecided on application's use of location services";
+            } else if (code == kCLAuthorizationStatusRestricted) {
+                message = @"application use of location services is restricted";
+            }
+        }
+        //PERMISSIONDENIED is only PositionError that makes sense when authorization denied
+        [self returnLocationError:PERMISSIONDENIED withMessage: message];
+        
+        return;
+    }
+    
+    if (![self isSignificantLocationChangeMonitoringAvailable])
+	{
+		[self returnLocationError:SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE withMessage: @"Significant location monitoring is unavailable"];
+        return;
+    }
+    
+    [[[DGGeofencingHelper sharedGeofencingHelper] locationManager] startMonitoringSignificantLocationChanges];
+    
+    [self returnRegionSuccess];
+}
+
+- (void) stopMonitoringSignificantLocationChanges:(CDVInvokedUrlCommand*)command {
+    NSString* callbackId = command.callbackId;
+    
+    [self saveGeofenceCallbackId:callbackId];
+    
+    if (![self isLocationServicesEnabled])
+	{
+		BOOL forcePrompt = NO;
+		if (!forcePrompt)
+		{
+            [self returnLocationError:PERMISSIONDENIED withMessage: nil];
+			return;
+		}
+    }
+    
+    if (![self isAuthorized])
+    {
+        NSString* message = nil;
+        BOOL authStatusAvailable = [CLLocationManager respondsToSelector:@selector(authorizationStatus)]; // iOS 4.2+
+        if (authStatusAvailable) {
+            NSUInteger code = [CLLocationManager authorizationStatus];
+            if (code == kCLAuthorizationStatusNotDetermined) {
+                // could return POSITION_UNAVAILABLE but need to coordinate with other platforms
+                message = @"User undecided on application's use of location services";
+            } else if (code == kCLAuthorizationStatusRestricted) {
+                message = @"application use of location services is restricted";
+            }
+        }
+        //PERMISSIONDENIED is only PositionError that makes sense when authorization denied
+        [self returnLocationError:PERMISSIONDENIED withMessage: message];
+        
+        return;
+    }
+    
+    if (![self isSignificantLocationChangeMonitoringAvailable])
+	{
+		[self returnLocationError:SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE withMessage: @"Significant location monitoring is unavailable"];
+        return;
+    }
+    
+    [[[DGGeofencingHelper sharedGeofencingHelper] locationManager] stopMonitoringSignificantLocationChanges];
+    
+    [self returnRegionSuccess];
+}
+
 
 - (void)addRegion:(CDVInvokedUrlCommand*)command {
     

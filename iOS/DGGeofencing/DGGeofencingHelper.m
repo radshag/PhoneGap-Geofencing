@@ -75,6 +75,30 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     }
 }
 
+-(void) locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setObject:[NSNumber numberWithDouble:[newLocation.timestamp timeIntervalSince1970]] forKey:@"new_timestamp"];
+    [dict setObject:[NSNumber numberWithDouble:newLocation.speed] forKey:@"new_speed"];
+    [dict setObject:[NSNumber numberWithDouble:newLocation.course] forKey:@"new_course"];
+    [dict setObject:[NSNumber numberWithDouble:newLocation.verticalAccuracy] forKey:@"new_verticalAccuracy"];
+    [dict setObject:[NSNumber numberWithDouble:newLocation.horizontalAccuracy] forKey:@"new_horizontalAccuracy"];
+    [dict setObject:[NSNumber numberWithDouble:newLocation.altitude] forKey:@"new_altitude"];
+    [dict setObject:[NSNumber numberWithDouble:newLocation.coordinate.latitude] forKey:@"new_latitude"];
+    [dict setObject:[NSNumber numberWithDouble:newLocation.coordinate.longitude] forKey:@"new_longitude"];
+    
+    [dict setObject:[NSNumber numberWithDouble:[oldLocation.timestamp timeIntervalSince1970]] forKey:@"old_timestamp"];
+    [dict setObject:[NSNumber numberWithDouble:oldLocation.speed] forKey:@"old_speed"];
+    [dict setObject:[NSNumber numberWithDouble:oldLocation.course] forKey:@"oldcourse"];
+    [dict setObject:[NSNumber numberWithDouble:oldLocation.verticalAccuracy] forKey:@"old_verticalAccuracy"];
+    [dict setObject:[NSNumber numberWithDouble:oldLocation.horizontalAccuracy] forKey:@"old_horizontalAccuracy"];
+    [dict setObject:[NSNumber numberWithDouble:oldLocation.altitude] forKey:@"old_altitude"];
+    [dict setObject:[NSNumber numberWithDouble:oldLocation.coordinate.latitude] forKey:@"old_latitude"];
+    [dict setObject:[NSNumber numberWithDouble:oldLocation.coordinate.longitude] forKey:@"old_longitude"];
+    
+    NSString *jsStatement = [NSString stringWithFormat:@"DGGeofencing.locationMonitorUpdate(%@);", [dict cdvjk_JSONString]];
+    [self.webView stringByEvaluatingJavaScriptFromString:jsStatement];
+}
+
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
 #pragma mark TODO - Monitoring Failure Callback
 //    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
@@ -85,6 +109,18 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
 //    if (callbackId) {
 //        [self writeJavascript:[result toErrorCallbackString:callbackId]];
 //    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+#pragma mark TODO - Location Failure Callback
+    //    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
+    //    [posError setObject: [NSNumber numberWithInt: error.code] forKey:@"code"];
+    //    [posError setObject: region.identifier forKey: @"regionid"];
+    //    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
+    //    NSString *callbackId = [self.locationData.locationCallbacks dequeue];
+    //    if (callbackId) {
+    //        [self writeJavascript:[result toErrorCallbackString:callbackId]];
+    //    }
 }
 
 - (id) init {

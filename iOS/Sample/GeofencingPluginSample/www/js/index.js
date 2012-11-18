@@ -51,6 +51,15 @@ var app = {
 				}
 			);
 			
+			DGGeofencing.startMonitoringSignificantLocationChanges(
+				function(result) { 
+					console.log("Location Monitor Success: " + result);
+				},
+				function(error) {   
+					console.log("failed to monitor location changes");
+				}
+			);
+			
 			DGGeofencing.getPendingRegionUpdates(
 				function(result) { 
 					var updates = result.pendingupdates;
@@ -126,6 +135,27 @@ var app = {
 			});
 	    });
 	
+		document.addEventListener('location-update', function(event) {
+			var new_timestamp = event.locationupdate.new_timestamp;
+			var new_speed = event.locationupdate.new_speed;
+			var new_course = event.locationupdate.new_course;
+			var new_verticalAccuracy = event.locationupdate.new_verticalAccuracy;
+			var new_horizontalAccuracy = event.locationupdate.new_horizontalAccuracy;
+			var new_altitude = event.locationupdate.new_altitude;
+			var new_latitude = event.locationupdate.new_latitude;
+			var new_longitude = event.locationupdate.new_longitude;
+			
+			var old_timestamp = event.locationupdate.old_timestamp;
+			var old_speed = event.locationupdate.old_speed;
+			var old_course = event.locationupdate.old_course;
+			var old_verticalAccuracy = event.locationupdate.old_verticalAccuracy;
+			var old_horizontalAccuracy = event.locationupdate.old_horizontalAccuracy;
+			var old_altitude = event.locationupdate.old_altitude;
+			var old_latitude = event.locationupdate.old_latitude;
+			var old_longitude = event.locationupdate.old_longitude;
+			
+			console.log("Location Update Event: " + event);	
+	    });
     }
 };
 
