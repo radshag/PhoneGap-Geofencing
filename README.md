@@ -165,7 +165,7 @@ Follow these steps to setup region notifications when the app is running:
 		var old_longitude = event.locationupdate.old_longitude;
 			
 		console.log("Location Update Event: " + event);	
-	    });</pre>
+	 });</pre>
 
 When the app is not running, even in the background,  region notifications are saved as they come in.
 In order to retrieve these pending region notifications follow these instructions.
