@@ -172,7 +172,7 @@ In order to retrieve these pending region notifications follow these instruction
 
 1. Add the following code in the app delegate - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 
-<pre>    if ([[launchOptions allKeys] containsObject:UIApplicationLaunchOptionsLocationKey]) {
+<pre>if ([[launchOptions allKeys] containsObject:UIApplicationLaunchOptionsLocationKey]) {
     [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:YES];
 } else {
     [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
