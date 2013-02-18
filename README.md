@@ -208,7 +208,7 @@ The latest version of the DGGeofencing plugin can always be found [here](https:/
 
 ## THANKS ##
 
-A big thank you to @edewit for authoring the Android DGGeofencing PhoneGap Plugin.
+A big thank you to [@edewit(https://github.com/edewit)] for authoring the Android DGGeofencing PhoneGap Plugin.
 
 ## LICENSE ##
 
