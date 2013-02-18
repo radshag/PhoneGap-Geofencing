@@ -18,15 +18,15 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 /**
  * @author edewit@redhat.com
  */
-public class GeoFencingService extends Service implements LocationListener {
+public class DGGeofencingService extends Service implements LocationListener {
     public static final int INTERFAL_TIME = 60000;
     public static final int MIN_DISTANCE = 10;
-    private final IBinder binder = new GeoFencingServiceBinder();
-    private static final String TAG = GeoFencingService.class.getSimpleName();
+    private final IBinder binder = new DGGeofencingServiceBinder();
+    private static final String TAG = DGGeofencingService.class.getSimpleName();
 
     static final String PROXIMITY_ALERT_INTENT = "geoFencingProximityAlert";
 
-    private Map<Integer, PendingIntent> regionIdIntentMapping = new HashMap<Integer, PendingIntent>();
+    private Map<String, PendingIntent> regionIdIntentMapping = new HashMap<String, PendingIntent>();
     private LocationManager locationManager;
     private Set<LocationChangedListener> listeners = new HashSet<LocationChangedListener>();
 
@@ -34,7 +34,7 @@ public class GeoFencingService extends Service implements LocationListener {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    public void addRegion(int id, double latitude, double longitude, float radius) {
+    public void addRegion(String id, double latitude, double longitude, float radius) {
         Intent intent = new Intent(PROXIMITY_ALERT_INTENT + id);
         intent.putExtra("id", id);
         PendingIntent proximityIntent = PendingIntent.getBroadcast(this, 0, intent, FLAG_ACTIVITY_NEW_TASK);
@@ -93,13 +93,13 @@ public class GeoFencingService extends Service implements LocationListener {
         return binder;
     }
 
-    public Set<Integer> getWatchedRegionIds() {
+    public Set<String> getWatchedRegionIds() {
         return regionIdIntentMapping.keySet();
     }
 
-    public class GeoFencingServiceBinder extends Binder {
-        GeoFencingService getService() {
-            return GeoFencingService.this;
+    public class DGGeofencingServiceBinder extends Binder {
+        DGGeofencingService getService() {
+            return DGGeofencingService.this;
         }
     }
 

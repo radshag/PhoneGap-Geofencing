@@ -5,7 +5,7 @@ Geofencing And Significant Location Change Monitoring Plugin For PhoneGap.
 
 ## DESCRIPTION ##
 
-* This plugin provides a simple way to use iOS Region Monitoring in PhoneGap applications.
+* This plugin provides a simple way to use iOS and Android Region Monitoring in PhoneGap applications.
 * Significant location changes API is exposed.
 * Simple JS interface is exposed to allow the adding and removing of regions to monitor.
 * Included ability to receive realtime region notifications when regions are entered and exited.
@@ -205,6 +205,10 @@ You can find this project in my github repository [Phonegap-Geofencing](https://
 All questions and comments are welcome.  Please do so on my [GitHub Page](https://github.com/radshag/PhoneGap-Geofencing/issues).
 
 The latest version of the DGGeofencing plugin can always be found [here](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/DGGeofencing).
+
+## THANKS ##
+
+A big thank you to [@edewit](https://github.com/edewit) for authoring the Android DGGeofencing PhoneGap Plugin.
 
 ## LICENSE ##
 
