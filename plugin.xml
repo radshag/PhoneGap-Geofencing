@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.phonegap.plugins.childbrowser"
-    version="3.0.4">
+    id="org.apache.cordova.plugin.DGGeofencing"
+    version="1">
 
     <name>Geo Fencing Plugin</name>
 
@@ -11,7 +11,7 @@
     <!-- android -->
     <platform name="android">
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <service android:name="org.apache.cordova.plugin.geo.GeoFencingService" />
+            <service android:name="org.apache.cordova.plugin.geo.DGGeofencingService" />
         </config-file>
 
         <!-- Cordova 1.5 - 1.9 -->
@@ -24,12 +24,9 @@
             <plugin name="DGGeofencing" value="org.apache.cordova.plugin.geo.GeoFencingPlugin" />
         </config-file>
 
-        <source-file src="src/android/GeoFencingPlugin.java"
-                target-dir="src/org/apache/cordova/plugin/geo/" />
-        <source-file src="src/android/GeoFencingService.java"
-                target-dir="src/org/apache/cordova/plugin/geo/" />
-        <source-file src="src/android/LocationChangedListener.java"
-                target-dir="src/org/apache/cordova/plugin/geo/" />
+        <source-file src="src/android/GeoFencingPlugin.java" target-dir="src/org/apache/cordova/plugin/geo/" />
+        <source-file src="src/android/DGGeofencingService.java" target-dir="src/org/apache/cordova/plugin/geo/" />
+        <source-file src="src/android/LocationChangedListener.java" target-dir="src/org/apache/cordova/plugin/geo/" />
     </platform>
 
     <!-- ios -->
