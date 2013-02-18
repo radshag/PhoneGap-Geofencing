@@ -18,11 +18,11 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 /**
  * @author edewit@redhat.com
  */
-public class GeoFencingService extends Service implements LocationListener {
+public class DGGeofencingService extends Service implements LocationListener {
     public static final int INTERFAL_TIME = 60000;
     public static final int MIN_DISTANCE = 10;
-    private final IBinder binder = new GeoFencingServiceBinder();
-    private static final String TAG = GeoFencingService.class.getSimpleName();
+    private final IBinder binder = new DGGeofencingServiceBinder();
+    private static final String TAG = DGGeofencingService.class.getSimpleName();
 
     static final String PROXIMITY_ALERT_INTENT = "geoFencingProximityAlert";
 
@@ -97,9 +97,9 @@ public class GeoFencingService extends Service implements LocationListener {
         return regionIdIntentMapping.keySet();
     }
 
-    public class GeoFencingServiceBinder extends Binder {
-        GeoFencingService getService() {
-            return GeoFencingService.this;
+    public class DGGeofencingServiceBinder extends Binder {
+        DGGeofencingService getService() {
+            return DGGeofencingService.this;
         }
     }
 

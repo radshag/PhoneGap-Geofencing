@@ -22,8 +22,8 @@ import static android.location.LocationManager.KEY_PROXIMITY_ENTERING;
 /**
  * @author edewit@redhat.com
  */
-public class GeoFencingPlugin extends CordovaPlugin {
-    public GeoFencingService service;
+public class DGGeofencing extends CordovaPlugin {
+    public DGGeofencingService service;
     private boolean bound;
     private LocationChangedListener locationChangedListener;
     private Location oldLocation;
@@ -35,7 +35,7 @@ public class GeoFencingPlugin extends CordovaPlugin {
     }
 
     private void bindGeoFencingService(Activity activity) {
-        Intent intent = new Intent(activity, GeoFencingService.class);
+        Intent intent = new Intent(activity, DGGeofencingService.class);
         activity.bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
@@ -127,7 +127,7 @@ public class GeoFencingPlugin extends CordovaPlugin {
     }
 
     private void registerListener(int id) {
-        IntentFilter filter = new IntentFilter(GeoFencingService.PROXIMITY_ALERT_INTENT + id);
+        IntentFilter filter = new IntentFilter(DGGeofencingService.PROXIMITY_ALERT_INTENT + id);
         cordova.getActivity().registerReceiver(new BroadcastReceiver() {
 
             @Override
@@ -138,7 +138,7 @@ public class GeoFencingPlugin extends CordovaPlugin {
     }
 
     private void fireRegionChangedEvent(Intent intent) {
-        Log.d("GeoFencingService", "received proximity alert");
+        Log.d("DGGeofencingService", "received proximity alert");
 
         String status = intent.getBooleanExtra(KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
         Integer id = (Integer) intent.getExtras().get("id");
@@ -162,8 +162,8 @@ public class GeoFencingPlugin extends CordovaPlugin {
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            GeoFencingService.GeoFencingServiceBinder binder = (GeoFencingService.GeoFencingServiceBinder) service;
-            GeoFencingPlugin.this.service = binder.getService();
+            DGGeofencingService.DGGeofencingServiceBinder binder = (DGGeofencingService.DGGeofencingServiceBinder) service;
+            DGGeofencing.this.service = binder.getService();
             bound = true;
         }
 
