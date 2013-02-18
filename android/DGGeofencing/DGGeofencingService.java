@@ -26,7 +26,7 @@ public class DGGeofencingService extends Service implements LocationListener {
 
     static final String PROXIMITY_ALERT_INTENT = "geoFencingProximityAlert";
 
-    private Map<Integer, PendingIntent> regionIdIntentMapping = new HashMap<Integer, PendingIntent>();
+    private Map<String, PendingIntent> regionIdIntentMapping = new HashMap<String, PendingIntent>();
     private LocationManager locationManager;
     private Set<LocationChangedListener> listeners = new HashSet<LocationChangedListener>();
 
@@ -34,7 +34,7 @@ public class DGGeofencingService extends Service implements LocationListener {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    public void addRegion(int id, double latitude, double longitude, float radius) {
+    public void addRegion(String id, double latitude, double longitude, float radius) {
         Intent intent = new Intent(PROXIMITY_ALERT_INTENT + id);
         intent.putExtra("id", id);
         PendingIntent proximityIntent = PendingIntent.getBroadcast(this, 0, intent, FLAG_ACTIVITY_NEW_TASK);
@@ -93,7 +93,7 @@ public class DGGeofencingService extends Service implements LocationListener {
         return binder;
     }
 
-    public Set<Integer> getWatchedRegionIds() {
+    public Set<String> getWatchedRegionIds() {
         return regionIdIntentMapping.keySet();
     }
 
