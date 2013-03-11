@@ -10,9 +10,6 @@
 
     <!-- android -->
     <platform name="android">
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <service android:name="org.apache.cordova.plugin.geo.DGGeofencingService" />
-        </config-file>
 
         <!-- Cordova 1.5 - 1.9 -->
         <config-file target="res/xml/plugins.xml" parent="/plugins">
