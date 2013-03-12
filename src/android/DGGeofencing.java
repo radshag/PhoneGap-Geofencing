@@ -27,6 +27,15 @@ public class DGGeoFencing extends CordovaPlugin {
   private LocationChangedListener locationChangedListener;
   private Location oldLocation;
   private BroadcastReceiver receiver;
+  private static DGGeoFencing instance;
+
+  public static DGGeoFencing getInstance() {
+    return instance;
+  }
+
+  public DGGeoFencing() {
+    instance = this;
+  }
 
   @Override
   public void onDestroy() {
@@ -96,12 +105,12 @@ public class DGGeoFencing extends CordovaPlugin {
     }
   }
 
-  private void fireLocationChangedEvent(final Location location) {
+  void fireLocationChangedEvent(final Location location) {
     Log.d(TAG, "fireLocationChangedEvent");
     cordova.getActivity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        webView.loadUrl("javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+        webView.loadUrl("javascript:DGGeoFencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
         oldLocation = location;
       }
     });
@@ -137,21 +146,25 @@ public class DGGeoFencing extends CordovaPlugin {
     receiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, final Intent intent) {
-        cordova.getActivity().runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
-            Integer id = (Integer) intent.getExtras().get("id");
-            webView.loadUrl("javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
-          }
-        });
-      }
-
-      private String createRegionEvent(Integer id, String status) {
-        return "{fid:" + id + ",status:\"" + status + "\"}";
+        fireRegionChangedEvent(intent);
       }
     };
     cordova.getActivity().registerReceiver(receiver, filter);
+  }
+
+  void fireRegionChangedEvent(final Intent intent) {
+    cordova.getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
+        Integer id = (Integer) intent.getExtras().get("id");
+        webView.loadUrl("javascript:DGGeoFencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+      }
+    });
+  }
+
+  private String createRegionEvent(Integer id, String status) {
+    return "{fid:" + id + ",status:\"" + status + "\"}";
   }
 
   private JSONObject parseParameters(JSONArray data) throws JSONException {
