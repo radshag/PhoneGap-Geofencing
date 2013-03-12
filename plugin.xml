@@ -10,6 +10,14 @@
 
     <!-- android -->
     <platform name="android">
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <receiver android:name="org.apache.cordova.plugin.geo.ProximityReceiver">
+                <intent-filter>
+                    <action android:name="geoFencingProximityAlert"/>
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+            </receiver>
+        </config-file>
 
         <!-- Cordova 1.5 - 1.9 -->
         <config-file target="res/xml/plugins.xml" parent="/plugins">
