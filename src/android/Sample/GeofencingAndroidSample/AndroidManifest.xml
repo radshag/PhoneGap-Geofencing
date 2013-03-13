@@ -57,7 +57,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="org.apache.cordova.plugin.geo.DGGeofencingService" />
+        <receiver android:name="org.apache.cordova.plugin.geo.ProximityReceiver">
+            <intent-filter>
+                <action android:name="geoFencingProximityAlert"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="17"/>
