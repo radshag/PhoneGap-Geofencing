@@ -17,7 +17,7 @@ var DGGeofencing = {
     #define KEY_REGION_ACCURACY @"accuracy"
 	*/
      addRegion: function(params, success, fail) {
-          return PhoneGap.exec(success, fail, "DGGeofencing", "addRegion", [params]);
+          return Cordova.exec(success, fail, "DGGeofencing", "addRegion", [params]);
      },
 
      /*
@@ -27,7 +27,7 @@ var DGGeofencing = {
     #define KEY_REGION_LNG     @"longitude"
 	*/
      removeRegion: function(params, success, fail) {
-          return PhoneGap.exec(success, fail, "DGGeofencing", "removeRegion", [params]);
+          return Cordova.exec(success, fail, "DGGeofencing", "removeRegion", [params]);
      },
 
      /*
@@ -35,7 +35,7 @@ var DGGeofencing = {
 	NONE
 	*/
 	getWatchedRegionIds: function(success, fail) {
-		return PhoneGap.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
+		return Cordova.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
 	},
 	
 	/*
@@ -43,7 +43,7 @@ var DGGeofencing = {
 	NONE
 	*/
 	getPendingRegionUpdates: function(success, fail) {
-		return PhoneGap.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
+		return Cordova.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
 	},
 	
 	/*
@@ -51,7 +51,7 @@ var DGGeofencing = {
 	NONE
 	*/
 	startMonitoringSignificantLocationChanges: function(success, fail) {
-		return PhoneGap.exec(success, fail, "DGGeofencing", "startMonitoringSignificantLocationChanges", []);
+		return Cordova.exec(success, fail, "DGGeofencing", "startMonitoringSignificantLocationChanges", []);
 	},
 	
 	/*
@@ -59,7 +59,7 @@ var DGGeofencing = {
 	NONE
 	*/
 	stopMonitoringSignificantLocationChanges: function(success, fail) {
-		return PhoneGap.exec(success, fail, "DGGeofencing", "stopMonitoringSignificantLocationChanges", []);
+		return Cordova.exec(success, fail, "DGGeofencing", "stopMonitoringSignificantLocationChanges", []);
 	},
 	
 	/* 
