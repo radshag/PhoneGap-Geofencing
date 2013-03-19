@@ -20,50 +20,16 @@
 #define KEY_REGION_RADIUS   @"radius"
 #define KEY_REGION_ACCURACY @"accuracy"
 
-enum DGLocationStatus {
-    PERMISSIONDENIED = 1,
-    POSITIONUNAVAILABLE,
-    TIMEOUT,
-    REGIONMONITORINGPERMISSIONDENIED,
-    REGIONMONITORINGUNAVAILABLE,
-    SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE
-};
-typedef NSInteger DGLocationStatus;
-
-enum DGLocationAccuracy {
-    DGLocationAccuracyBestForNavigation,
-    DGLocationAccuracyBest,
-    DGLocationAccuracyNearestTenMeters,
-    DGLocationAccuracyHundredMeters,
-    DGLocationAccuracyThreeKilometers
-};
-typedef NSInteger DGLocationAccuracy;
-
-// simple ojbect to keep track of location information
-@interface DGLocationData : NSObject
-
-@property (nonatomic, assign) DGLocationStatus locationStatus;
-@property (nonatomic, retain) CLLocation* locationInfo;
-@property (nonatomic, retain) NSMutableArray* locationCallbacks;
-
-@end
-
 @interface DGGeofencing : CDVPlugin <CLLocationManagerDelegate>
-
-//@property (nonatomic, retain) CLLocationManager *locationManager;
-@property (nonatomic, retain) DGLocationData* locationData;
 
 - (BOOL) isLocationServicesEnabled;
 - (BOOL) isAuthorized;
 - (BOOL) isRegionMonitoringAvailable;
 - (BOOL) isRegionMonitoringEnabled;
 - (BOOL) isSignificantLocationChangeMonitoringAvailable;
-- (void) saveGeofenceCallbackId:(NSString *) callbackId;
 - (void) addRegionToMonitor:(NSMutableDictionary *)params;
 - (void) removeRegionToMonitor:(NSMutableDictionary *)params;
 
-- (void) returnLocationError: (NSUInteger) errorCode withMessage: (NSString*) message;
-- (void) returnRegionSuccess;
 
 #pragma mark Plugin Functions
 - (void) addRegion:(CDVInvokedUrlCommand*)command;
