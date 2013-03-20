@@ -27,7 +27,6 @@ public class DGGeofencingService implements LocationListener {
 
   static final String PROXIMITY_ALERT_INTENT = "geoFencingProximityAlert";
 
-  private Map<String, PendingIntent> regionIdIntentMapping = new HashMap<String, PendingIntent>();
   private LocationManager locationManager;
   private Set<LocationChangedListener> listeners = new HashSet<LocationChangedListener>();
   private final Activity activity;
@@ -43,21 +42,19 @@ public class DGGeofencingService implements LocationListener {
   }
 
   public void addRegion(String id, double latitude, double longitude, float radius) {
-    Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
-    intent.putExtra("id", id);
-    PendingIntent proximityIntent = PendingIntent.getBroadcast(activity, 0, intent, FLAG_ACTIVITY_NEW_TASK);
-    regionIdIntentMapping.put(id, proximityIntent);
-
+    PendingIntent proximityIntent = createIntent(id);
     locationManager.addProximityAlert(latitude, longitude, radius, -1, proximityIntent);
   }
 
   public void removeRegion(String id) {
-	    Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
-	    intent.putExtra("id", id);
-	    PendingIntent proximityIntent = PendingIntent.getBroadcast(activity, 0, intent, FLAG_ACTIVITY_NEW_TASK);
-	    regionIdIntentMapping.put(id, proximityIntent);
+    PendingIntent proximityIntent = createIntent(id);
+    locationManager.removeProximityAlert(proximityIntent);
+  }
 
-	    locationManager.removeProximityAlert(proximityIntent);
+  private PendingIntent createIntent(String id) {
+    Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
+    intent.putExtra("id", id);
+    return PendingIntent.getBroadcast(activity, 0, intent, FLAG_ACTIVITY_NEW_TASK);
   }
 
   public void addLocationChangedListener(LocationChangedListener listener) {
@@ -89,9 +86,5 @@ public class DGGeofencingService implements LocationListener {
 
   @Override
   public void onProviderDisabled(String s) {
-  }
-
-  public Set<String> getWatchedRegionIds() {
-    return regionIdIntentMapping.keySet();
   }
 }
