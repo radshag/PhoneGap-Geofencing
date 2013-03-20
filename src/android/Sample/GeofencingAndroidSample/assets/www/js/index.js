@@ -272,6 +272,7 @@ function doAddLocation(location) {
 			});   
       	},
       	function(error) {   
+      		console.log(error);
 	  		alert("failed to add region");
       	}
 	);

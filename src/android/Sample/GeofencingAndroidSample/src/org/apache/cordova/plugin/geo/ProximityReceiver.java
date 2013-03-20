@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 
-import static org.apache.cordova.plugin.geo.DGGeoFencingService.TAG;
+import static org.apache.cordova.plugin.geo.DGGeofencingService.TAG;
 
 /**
  * @author edewit@redhat.com
@@ -18,9 +18,9 @@ public class ProximityReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    Integer id = (Integer) intent.getExtras().get("id");
+    String id = (String) intent.getExtras().get("id");
     Log.d(TAG, "received proximity alert for region " + id);
 
-    DGGeoFencing.getInstance().fireRegionChangedEvent(intent);
+    DGGeofencing.getInstance().fireRegionChangedEvent(intent);
   }
 }
