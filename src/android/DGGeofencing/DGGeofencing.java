@@ -17,23 +17,23 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Set;
 
-import static org.apache.cordova.plugin.geo.DGGeoFencingService.TAG;
+import static org.apache.cordova.plugin.geo.DGGeofencingService.TAG;
 
 /**
  * @author edewit@redhat.com
  */
-public class DGGeoFencing extends CordovaPlugin {
-  public DGGeoFencingService service;
+public class DGGeofencing extends CordovaPlugin {
+  public DGGeofencingService service;
   private LocationChangedListener locationChangedListener;
   private Location oldLocation;
   private BroadcastReceiver receiver;
-  private static DGGeoFencing instance;
+  private static DGGeofencing instance;
 
-  public static DGGeoFencing getInstance() {
+  public static DGGeofencing getInstance() {
     return instance;
   }
 
-  public DGGeoFencing() {
+  public DGGeofencing() {
     instance = this;
   }
 
@@ -51,7 +51,7 @@ public class DGGeoFencing extends CordovaPlugin {
 
       if ("addRegion".equals(action)) {
         JSONObject params = parseParameters(data);
-        int id = params.getInt("fid");
+        String id = params.getString("fid");
         Log.d(TAG, "adding region " + id);
         service.addRegion(id, params.getDouble("latitude"), params.getDouble("longitude"),
                 (float) params.getInt("radius"));
@@ -61,12 +61,13 @@ public class DGGeoFencing extends CordovaPlugin {
       }
       if ("removeRegion".equals(action)) {
         JSONObject params = parseParameters(data);
-        int id = params.getInt("fid");
+        String id = params.getString("fid");
         service.removeRegion(id);
+        callbackContext.success();
         return true;
       }
       if ("getWatchedRegionIds".equals(action)) {
-        Set<Integer> watchedRegionIds = service.getWatchedRegionIds();
+        Set<String> watchedRegionIds = service.getWatchedRegionIds();
         callbackContext.success(new JSONArray(watchedRegionIds));
       }
 
@@ -101,7 +102,7 @@ public class DGGeoFencing extends CordovaPlugin {
 
   private void createService() {
     if (service == null) {
-      service = new DGGeoFencingService(cordova.getActivity());
+      service = new DGGeofencingService(cordova.getActivity());
     }
   }
 
@@ -142,7 +143,7 @@ public class DGGeoFencing extends CordovaPlugin {
   }
 
   private void registerListener() {
-    IntentFilter filter = new IntentFilter(DGGeoFencingService.PROXIMITY_ALERT_INTENT);
+    IntentFilter filter = new IntentFilter(DGGeofencingService.PROXIMITY_ALERT_INTENT);
     receiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, final Intent intent) {
@@ -157,13 +158,13 @@ public class DGGeoFencing extends CordovaPlugin {
       @Override
       public void run() {
         String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
-        Integer id = (Integer) intent.getExtras().get("id");
+        String id = (String) intent.getExtras().get("id");
         webView.loadUrl("javascript:DGGeoFencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
       }
     });
   }
 
-  private String createRegionEvent(Integer id, String status) {
+  private String createRegionEvent(String id, String status) {
     return "{fid:" + id + ",status:\"" + status + "\"}";
   }
 
