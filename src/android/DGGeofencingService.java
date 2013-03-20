@@ -20,19 +20,18 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 /**
  * @author edewit@redhat.com
  */
-public class DGGeoFencingService implements LocationListener {
+public class DGGeofencingService implements LocationListener {
   public static final int INTERFAL_TIME = 60000;
   public static final int MIN_DISTANCE = 10;
-  static final String TAG = DGGeoFencingService.class.getSimpleName();
+  static final String TAG = DGGeofencingService.class.getSimpleName();
 
   static final String PROXIMITY_ALERT_INTENT = "geoFencingProximityAlert";
 
-  private Map<Integer, PendingIntent> regionIdIntentMapping = new HashMap<Integer, PendingIntent>();
   private LocationManager locationManager;
   private Set<LocationChangedListener> listeners = new HashSet<LocationChangedListener>();
   private final Activity activity;
 
-  public DGGeoFencingService(Activity activity) {
+  public DGGeofencingService(Activity activity) {
     this.activity = activity;
     locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -42,17 +41,20 @@ public class DGGeoFencingService implements LocationListener {
     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, INTERFAL_TIME, MIN_DISTANCE, this);
   }
 
-  public void addRegion(int id, double latitude, double longitude, float radius) {
-    Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
-    intent.putExtra("id", id);
-    PendingIntent proximityIntent = PendingIntent.getBroadcast(activity, 0, intent, FLAG_ACTIVITY_NEW_TASK);
-    regionIdIntentMapping.put(id, proximityIntent);
-
+  public void addRegion(String id, double latitude, double longitude, float radius) {
+    PendingIntent proximityIntent = createIntent(id);
     locationManager.addProximityAlert(latitude, longitude, radius, -1, proximityIntent);
   }
 
-  public void removeRegion(int id) {
-    locationManager.removeProximityAlert(regionIdIntentMapping.get(id));
+  public void removeRegion(String id) {
+    PendingIntent proximityIntent = createIntent(id);
+    locationManager.removeProximityAlert(proximityIntent);
+  }
+
+  private PendingIntent createIntent(String id) {
+    Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
+    intent.putExtra("id", id);
+    return PendingIntent.getBroadcast(activity, 0, intent, FLAG_ACTIVITY_NEW_TASK);
   }
 
   public void addLocationChangedListener(LocationChangedListener listener) {
@@ -84,9 +86,5 @@ public class DGGeoFencingService implements LocationListener {
 
   @Override
   public void onProviderDisabled(String s) {
-  }
-
-  public Set<Integer> getWatchedRegionIds() {
-    return regionIdIntentMapping.keySet();
   }
 }
