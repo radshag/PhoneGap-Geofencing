@@ -81,10 +81,12 @@ public class DGGeofencing extends CordovaPlugin {
         String id = params.getString("fid");
         service.removeRegion(id);
         regionIds.remove(id);
+        callbackContext.success();
         return true;
       }
       if ("getWatchedRegionIds".equals(action)) {
         callbackContext.success(new JSONArray(regionIds));
+		return true;
       }
 
       if ("startMonitoringSignificantLocationChanges".equals(action)) {
@@ -99,6 +101,7 @@ public class DGGeofencing extends CordovaPlugin {
         }
         service.addLocationChangedListener(locationChangedListener);
         callbackContext.success();
+		return true;
       }
 
       if ("stopMonitoringSignificantLocationChanges".equals(action)) {

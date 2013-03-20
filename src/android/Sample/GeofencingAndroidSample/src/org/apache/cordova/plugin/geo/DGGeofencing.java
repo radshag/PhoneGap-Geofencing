@@ -63,6 +63,7 @@ public class DGGeofencing extends CordovaPlugin {
         JSONObject params = parseParameters(data);
         String id = params.getString("fid");
         service.removeRegion(id);
+        callbackContext.success();
         return true;
       }
       if ("getWatchedRegionIds".equals(action)) {
