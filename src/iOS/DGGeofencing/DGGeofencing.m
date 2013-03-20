@@ -9,42 +9,13 @@
 #import "DGGeofencing.h"
 #import <Cordova/CDVViewController.h>
 
-@implementation DGLocationData
-
-@synthesize locationStatus, locationInfo, locationCallbacks;
-
--(DGLocationData*) init
-{
-    self = (DGLocationData*)[super init];
-    if (self) 
-	{
-        self.locationInfo = nil;
-        self.locationCallbacks = nil;
-        [CDVPluginResult setVerbose:YES];
-    }
-    return self;
-}
--(void) dealloc 
-{
-    self.locationInfo = nil;
-    self.locationCallbacks = nil;
-    [super dealloc];  
-}
-
-@end
-
 @implementation DGGeofencing
-
-@synthesize locationData;
 
 - (CDVPlugin*) initWithWebView:(UIWebView*)theWebView
 {
     self = (DGGeofencing*)[super initWithWebView:(UIWebView*)theWebView];
     if (self) 
 	{
-        //self.locationManager = [[[CLLocationManager alloc] init] autorelease];
-        //self.locationManager.delegate = self; // Tells the location manager to send updates to this object
-        self.locationData = nil;
     }
     return self;
 }
@@ -127,57 +98,21 @@
 	}
 }
 
-- (void) saveGeofenceCallbackId:(NSString *) callbackId {
-    NSLog(@"callbackId: %@", callbackId);
-    if (!self.locationData) {
-        self.locationData = [[[DGLocationData alloc] init] autorelease];
-    }
-    
-    DGLocationData* lData = self.locationData;
-    if (!lData.locationCallbacks) {
-        lData.locationCallbacks = [NSMutableArray array];//]WithCapacity:1];
-    }
-    
-    // add the callbackId into the array so we can call back when get data
-    [lData.locationCallbacks enqueue:callbackId];
-}
-
-- (void) returnRegionSuccess; {
-    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
-    [posError setObject: [NSNumber numberWithInt: CDVCommandStatus_OK] forKey:@"code"];
-    [posError setObject: @"Region Success" forKey: @"message"];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:posError];
-    NSString *callbackId = [self.locationData.locationCallbacks dequeue];
-    if (callbackId) {
-        [self writeJavascript:[result toSuccessCallbackString:callbackId]];
-    }
-}
-
-- (void)returnLocationError: (NSUInteger) errorCode withMessage: (NSString*) message
-{
-    NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
-    [posError setObject: [NSNumber numberWithInt: errorCode] forKey:@"code"];
-    [posError setObject: message ? message : @"" forKey: @"message"];
-    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
-    NSString *callbackId = [self.locationData.locationCallbacks dequeue];
-    if (callbackId) {
-        [self writeJavascript:[result toErrorCallbackString:callbackId]];
-    }
-}
-
 #pragma mark Plugin Functions
 
 - (void) startMonitoringSignificantLocationChanges:(CDVInvokedUrlCommand*)command {
     NSString* callbackId = command.callbackId;
     
-    [self saveGeofenceCallbackId:callbackId];
+    [[DGGeofencingHelper sharedGeofencingHelper] saveLocationCallbackId:callbackId];
+    
+    [[DGGeofencingHelper sharedGeofencingHelper] setCommandDelegate:self.commandDelegate];
     
     if (![self isLocationServicesEnabled])
 	{
 		BOOL forcePrompt = NO;
 		if (!forcePrompt)
 		{
-            [self returnLocationError:PERMISSIONDENIED withMessage: nil];
+            [[DGGeofencingHelper sharedGeofencingHelper] returnLocationError:PERMISSIONDENIED withMessage: nil];
 			return;
 		}
     }
@@ -196,33 +131,33 @@
             }
         }
         //PERMISSIONDENIED is only PositionError that makes sense when authorization denied
-        [self returnLocationError:PERMISSIONDENIED withMessage: message];
+        [[DGGeofencingHelper sharedGeofencingHelper] returnLocationError:PERMISSIONDENIED withMessage: message];
         
         return;
     }
     
     if (![self isSignificantLocationChangeMonitoringAvailable])
 	{
-		[self returnLocationError:SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE withMessage: @"Significant location monitoring is unavailable"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnLocationError:SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE withMessage: @"Significant location monitoring is unavailable"];
         return;
     }
     
     [[[DGGeofencingHelper sharedGeofencingHelper] locationManager] startMonitoringSignificantLocationChanges];
-    
-    [self returnRegionSuccess];
 }
 
 - (void) stopMonitoringSignificantLocationChanges:(CDVInvokedUrlCommand*)command {
     NSString* callbackId = command.callbackId;
     
-    [self saveGeofenceCallbackId:callbackId];
+    [[DGGeofencingHelper sharedGeofencingHelper] saveLocationCallbackId:callbackId];
+    
+    [[DGGeofencingHelper sharedGeofencingHelper] setCommandDelegate:self.commandDelegate];
     
     if (![self isLocationServicesEnabled])
 	{
 		BOOL forcePrompt = NO;
 		if (!forcePrompt)
 		{
-            [self returnLocationError:PERMISSIONDENIED withMessage: nil];
+            [[DGGeofencingHelper sharedGeofencingHelper] returnLocationError:PERMISSIONDENIED withMessage: nil];
 			return;
 		}
     }
@@ -241,20 +176,20 @@
             }
         }
         //PERMISSIONDENIED is only PositionError that makes sense when authorization denied
-        [self returnLocationError:PERMISSIONDENIED withMessage: message];
+        [[DGGeofencingHelper sharedGeofencingHelper] returnLocationError:PERMISSIONDENIED withMessage: message];
         
         return;
     }
     
     if (![self isSignificantLocationChangeMonitoringAvailable])
 	{
-		[self returnLocationError:SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE withMessage: @"Significant location monitoring is unavailable"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnLocationError:SIGNIFICANTLOCATIONMONITORINGUNAVAILABLE withMessage: @"Significant location monitoring is unavailable"];
         return;
     }
     
     [[[DGGeofencingHelper sharedGeofencingHelper] locationManager] stopMonitoringSignificantLocationChanges];
     
-    [self returnRegionSuccess];
+    [[DGGeofencingHelper sharedGeofencingHelper] returnLocationSuccess];
 }
 
 
@@ -262,14 +197,16 @@
     
     NSString* callbackId = command.callbackId;
     
-    [self saveGeofenceCallbackId:callbackId];
+    [[DGGeofencingHelper sharedGeofencingHelper] saveGeofenceCallbackId:callbackId];
+    
+    [[DGGeofencingHelper sharedGeofencingHelper] setCommandDelegate:self.commandDelegate];
     
     if (![self isLocationServicesEnabled])
 	{
 		BOOL forcePrompt = NO;
 		if (!forcePrompt)
 		{
-            [self returnLocationError:PERMISSIONDENIED withMessage: nil];
+            [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: nil];
 			return;
 		}
     }
@@ -288,27 +225,27 @@
             }
         }
         //PERMISSIONDENIED is only PositionError that makes sense when authorization denied
-        [self returnLocationError:PERMISSIONDENIED withMessage: message];
+        [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: message];
         
         return;
     } 
     
     if (![self isRegionMonitoringAvailable])
 	{
-		[self returnLocationError:REGIONMONITORINGUNAVAILABLE withMessage: @"Region monitoring is unavailable"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGUNAVAILABLE withMessage: @"Region monitoring is unavailable"];
         return;
     }
     
     if (![self isRegionMonitoringEnabled])
 	{
-		[self returnLocationError:REGIONMONITORINGPERMISSIONDENIED withMessage: @"User has restricted the use of region monitoring"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGPERMISSIONDENIED withMessage: @"User has restricted the use of region monitoring"];
         return;
     }
     NSMutableDictionary *options;
     [command legacyArguments:nil andDict:&options];
     [self addRegionToMonitor:options];
     
-    [self returnRegionSuccess];
+    [[DGGeofencingHelper sharedGeofencingHelper] returnRegionSuccess];
 }
 
 - (void) getPendingRegionUpdates:(CDVInvokedUrlCommand*)command {
@@ -365,14 +302,16 @@
     
     NSString* callbackId = command.callbackId;
     
-    [self saveGeofenceCallbackId:callbackId];
+    [[DGGeofencingHelper sharedGeofencingHelper] saveGeofenceCallbackId:callbackId];
+    
+    [[DGGeofencingHelper sharedGeofencingHelper] setCommandDelegate:self.commandDelegate];
     
     if (![self isLocationServicesEnabled])
 	{
 		BOOL forcePrompt = NO;
 		if (!forcePrompt)
 		{
-            [self returnLocationError:PERMISSIONDENIED withMessage: nil];
+            [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: nil];
 			return;
 		}
     }
@@ -391,27 +330,27 @@
             }
         }
         //PERMISSIONDENIED is only PositionError that makes sense when authorization denied
-        [self returnLocationError:PERMISSIONDENIED withMessage: message];
+        [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: message];
         
         return;
     }  
     
     if (![self isRegionMonitoringAvailable])
 	{
-		[self returnLocationError:REGIONMONITORINGUNAVAILABLE withMessage: @"Region monitoring is unavailable"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGUNAVAILABLE withMessage: @"Region monitoring is unavailable"];
         return;
     }
     
     if (![self isRegionMonitoringEnabled])
 	{
-		[self returnLocationError:REGIONMONITORINGPERMISSIONDENIED withMessage: @"User has restricted the use of region monitoring"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGPERMISSIONDENIED withMessage: @"User has restricted the use of region monitoring"];
         return;
     }
     NSMutableDictionary *options;
     [command legacyArguments:nil andDict:&options];
     [self removeRegionToMonitor:options];
     
-    [self returnRegionSuccess];
+    [[DGGeofencingHelper sharedGeofencingHelper] returnRegionSuccess];
 }
 
 - (void)getWatchedRegionIds:(CDVInvokedUrlCommand*)command {
