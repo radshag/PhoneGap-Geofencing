@@ -100,7 +100,7 @@ var app = {
 					});   
 		      	},
 		      	function(error) {   
-			  		console.log("failed to add region");
+			  		console.log("failed to get pending region updates");
 		      	}
 			);
 		});
@@ -114,8 +114,10 @@ var app = {
 		            if (fid == item.fid) {
 		                if(status == "enter") {
 							item.currentlyHere = "yes";
+							alert("name: " + item.name + " status: " + status);
 						} else {
 							item.currentlyHere = "no";
+							alert("name: " + item.name + " status: " + status);
 						}
 					}
 		        });

@@ -124,7 +124,8 @@ public class DGGeofencing extends CordovaPlugin {
     cordova.getActivity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        webView.loadUrl("javascript:DGGeoFencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+    	    Log.d(TAG, "javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+        webView.loadUrl("javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
         oldLocation = location;
       }
     });
@@ -172,13 +173,25 @@ public class DGGeofencing extends CordovaPlugin {
       public void run() {
         String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
         String id = (String) intent.getExtras().get("id");
-        webView.loadUrl("javascript:DGGeoFencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+	    Log.d(TAG, "javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+        webView.loadUrl("javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
       }
     });
   }
 
   private String createRegionEvent(String id, String status) {
-    return "{fid:" + id + ",status:\"" + status + "\"}";
+	  	JSONObject event = new JSONObject();
+	  	try {
+			event.put("fid", id);
+			event.put("status", status);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException("region could not be serialized to json", e);
+		}
+	  	
+	  
+	  	return event.toString();
   }
 
   private JSONObject parseParameters(JSONArray data) throws JSONException {
