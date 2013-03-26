@@ -3,6 +3,10 @@ PhoneGap-Geofencing
 
 Geofencing And Significant Location Change Monitoring Plugin For PhoneGap.
 
+This Phonegap Plugin has been developed by Dov Goldberg of Ogonium.  Feel free to use the code in any projects according the the license at the bottom of this readme.
+
+I am happy to offer my consulting services if needed and can be contacted at: dov.goldberg@ogonium.com
+
 ## DESCRIPTION ##
 
 * This plugin provides a simple way to use iOS and Android Region Monitoring in PhoneGap applications.
@@ -205,6 +209,8 @@ You can find this project in my github repository [Phonegap-Geofencing](https://
 All questions and comments are welcome.  Please do so on my [GitHub Page](https://github.com/radshag/PhoneGap-Geofencing/issues).
 
 The latest version of the DGGeofencing plugin can always be found [here](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/DGGeofencing).
+
+If you would like to have me consult on a project you can always reach me at dov.goldberg@ogonium.com.
 
 ## THANKS ##
 
