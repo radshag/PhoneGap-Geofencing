@@ -36,14 +36,11 @@ public class DGGeofencing extends CordovaPlugin {
     return instance;
   }
 
-  public DGGeofencing() {
-    instance = this;
-  }
-
   @Override
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
 
+    instance = this;
     SharedPreferences settings = cordova.getActivity().getSharedPreferences(PREFS_NAME, 0);
     regionIds = settings.getStringSet(PREFS_NAME, new HashSet<String>());
 
@@ -81,12 +78,11 @@ public class DGGeofencing extends CordovaPlugin {
         String id = params.getString("fid");
         service.removeRegion(id);
         regionIds.remove(id);
-        callbackContext.success();
         return true;
       }
       if ("getWatchedRegionIds".equals(action)) {
         callbackContext.success(new JSONArray(regionIds));
-		return true;
+        return true;
       }
 
       if ("startMonitoringSignificantLocationChanges".equals(action)) {
@@ -101,12 +97,13 @@ public class DGGeofencing extends CordovaPlugin {
         }
         service.addLocationChangedListener(locationChangedListener);
         callbackContext.success();
-		return true;
+        return true;
       }
 
       if ("stopMonitoringSignificantLocationChanges".equals(action)) {
         service.removeLocationChangedListener(locationChangedListener);
         callbackContext.success();
+        return true;
       }
 
     } catch (Exception e) {
@@ -124,7 +121,7 @@ public class DGGeofencing extends CordovaPlugin {
     cordova.getActivity().runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        webView.loadUrl("javascript:DGGeoFencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+        webView.loadUrl("javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
         oldLocation = location;
       }
     });
@@ -172,7 +169,7 @@ public class DGGeofencing extends CordovaPlugin {
       public void run() {
         String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
         String id = (String) intent.getExtras().get("id");
-        webView.loadUrl("javascript:DGGeoFencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+        webView.loadUrl("javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
       }
     });
   }
