@@ -29,9 +29,9 @@
             <plugin name="DGGeofencing" value="org.apache.cordova.plugin.geo.DGGeofencing" />
         </config-file>
 
-        <source-file src="src/android/DGGeofencing.java" target-dir="src/org/apache/cordova/plugin/geo/" />
-        <source-file src="src/android/DGGeofencingService.java" target-dir="src/org/apache/cordova/plugin/geo/" />
-        <source-file src="src/android/LocationChangedListener.java" target-dir="src/org/apache/cordova/plugin/geo/" />
+        <source-file src="src/android/DGGeofencing/DGGeofencing.java" target-dir="src/org/apache/cordova/plugin/geo/" />
+        <source-file src="src/android/DGGeofencing/DGGeofencingService.java" target-dir="src/org/apache/cordova/plugin/geo/" />
+        <source-file src="src/android/DGGeofencing/LocationChangedListener.java" target-dir="src/org/apache/cordova/plugin/geo/" />
     </platform>
 
     <!-- ios -->
