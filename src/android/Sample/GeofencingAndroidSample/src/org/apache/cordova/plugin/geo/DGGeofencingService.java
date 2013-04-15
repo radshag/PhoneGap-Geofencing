@@ -28,11 +28,11 @@ public class DGGeofencingService implements LocationListener {
 
   private LocationManager locationManager;
   private Set<LocationChangedListener> listeners = new HashSet<LocationChangedListener>();
-  private final Activity activity;
+  private final Context context;
 
-  public DGGeofencingService(Activity activity) {
-    this.activity = activity;
-    locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+  public DGGeofencingService(Context context) {
+    this.context = context;
+    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     if (location != null) {
       onLocationChanged(location);
@@ -53,7 +53,7 @@ public class DGGeofencingService implements LocationListener {
   private PendingIntent createIntent(String id) {
     Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
     intent.putExtra("id", id);
-    return PendingIntent.getBroadcast(activity, 0, intent, FLAG_ACTIVITY_NEW_TASK);
+    return PendingIntent.getBroadcast(this.context, 0, intent, FLAG_ACTIVITY_NEW_TASK);
   }
 
   public void addLocationChangedListener(LocationChangedListener listener) {

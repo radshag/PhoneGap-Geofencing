@@ -114,10 +114,10 @@ var app = {
 		            if (fid == item.fid) {
 		                if(status == "enter") {
 							item.currentlyHere = "yes";
-							alert("name: " + item.name + " status: " + status);
+							alert("checkin");
 						} else {
 							item.currentlyHere = "no";
-							alert("name: " + item.name + " status: " + status);
+							alert("checkout");
 						}
 					}
 		        });

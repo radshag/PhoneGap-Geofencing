@@ -121,14 +121,16 @@ public class DGGeofencing extends CordovaPlugin {
 
   void fireLocationChangedEvent(final Location location) {
     Log.d(TAG, "fireLocationChangedEvent");
-    cordova.getActivity().runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-    	    Log.d(TAG, "javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
-        webView.loadUrl("javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
-        oldLocation = location;
-      }
-    });
+    Log.d(TAG, "javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+    this.webView.sendJavascript("DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+//    cordova.getActivity().runOnUiThread(new Runnable() {
+//      @Override
+//      public void run() {
+//    	    Log.d(TAG, "javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+//        webView.loadUrl("javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+//        oldLocation = location;
+//      }
+//    });
   }
 
   private String createLocationEvent(Location location) {
@@ -168,15 +170,19 @@ public class DGGeofencing extends CordovaPlugin {
   }
 
   void fireRegionChangedEvent(final Intent intent) {
-    cordova.getActivity().runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
-        String id = (String) intent.getExtras().get("id");
-	    Log.d(TAG, "javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
-        webView.loadUrl("javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
-      }
-    });
+	  String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
+	  String id = (String) intent.getExtras().get("id");
+	  Log.d(TAG, "javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+	  this.webView.sendJavascript("DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+//    cordova.getActivity().runOnUiThread(new Runnable() {
+//      @Override
+//      public void run() {
+//        String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
+//        String id = (String) intent.getExtras().get("id");
+//	    Log.d(TAG, "javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+//        webView.loadUrl("javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+//      }
+//    });
   }
 
   private String createRegionEvent(String id, String status) {
