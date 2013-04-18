@@ -43,7 +43,7 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
 @synthesize locationData;
 @synthesize commandDelegate;
 
-- (void) saveGeofenceCallbackId:(NSString *) callbackId {
+- (void) saveGeofenceCallbackId:(NSString *) callbackId withKey:(NSString *)key{
     NSLog(@"callbackId: %@", callbackId);
     if (!self.locationData) {
         self.locationData = [[[DGLocationData alloc] init] autorelease];
@@ -51,11 +51,12 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     
     DGLocationData* lData = self.locationData;
     if (!lData.geofenceCallbacks) {
-        lData.geofenceCallbacks = [NSMutableArray array];//]WithCapacity:1];
+        lData.geofenceCallbacks = [NSMutableDictionary dictionary];//]WithCapacity:1];
     }
     
+    [lData.geofenceCallbacks setObject:callbackId forKey:key];
     // add the callbackId into the array so we can call back when get data
-    [lData.geofenceCallbacks enqueue:callbackId];
+    //[lData.geofenceCallbacks enqueue:callbackId];
 }
 
 - (void) saveLocationCallbackId:(NSString *) callbackId {
@@ -180,20 +181,17 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     self.locationData.locationCallbacks = [NSMutableArray array];
 }
 
-- (void) returnRegionSuccess; {
+- (void) returnRegionSuccessForRegion:(NSString *)regionId AndKeepCallbackAsBool:(BOOL)keepcallback {
     NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
     [posError setObject: [NSNumber numberWithInt: CDVCommandStatus_OK] forKey:@"code"];
     [posError setObject: @"Region Success" forKey: @"message"];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:posError];
-    for (NSString *callbackId in self.locationData.geofenceCallbacks) {
-        if (callbackId) {
-            [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-        }
-    }
-    self.locationData.geofenceCallbacks = [NSMutableArray array];
+    NSString *callbackId = [self.locationData.geofenceCallbacks objectForKey:regionId];
+    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+    [result setKeepCallbackAsBool:keepcallback];
 }
 
-- (void) returnLocationSuccess; {
+- (void) returnLocationSuccess {
     NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
     [posError setObject: [NSNumber numberWithInt: CDVCommandStatus_OK] forKey:@"code"];
     [posError setObject: @"Region Success" forKey: @"message"];
@@ -220,18 +218,15 @@ static DGGeofencingHelper *sharedGeofencingHelper = nil;
     self.locationData.locationCallbacks = [NSMutableArray array];
 }
 
-- (void) returnGeofenceError: (NSUInteger) errorCode withMessage: (NSString*) message
+- (void) returnGeofenceError: (NSUInteger) errorCode withMessage: (NSString*) message forRegionId:(NSString *)regionId andKeepCallback:(BOOL)keepcallback
 {
     NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
     [posError setObject: [NSNumber numberWithInt: errorCode] forKey:@"code"];
     [posError setObject: message ? message : @"" forKey: @"message"];
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
-    for (NSString *callbackId in self.locationData.geofenceCallbacks) {
-        if (callbackId) {
-            [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-        }
-    }
-    self.locationData.geofenceCallbacks = [NSMutableArray array];
+    NSString *callbackId = [self.locationData.geofenceCallbacks objectForKey:regionId];
+    [self.commandDelegate sendPluginResult:result callbackId:callbackId];
+    [result setKeepCallbackAsBool:keepcallback];
 }
 
 - (id) init {
