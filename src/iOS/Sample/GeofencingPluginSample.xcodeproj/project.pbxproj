@@ -14,7 +14,6 @@
 		1F766FE113BBADB100FB74C0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F766FDC13BBADB100FB74C0 /* Localizable.strings */; };
 		1F766FE213BBADB100FB74C0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F766FDF13BBADB100FB74C0 /* Localizable.strings */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		301BF552109A68D80062928A /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF535109A57CC0062928A /* libCordova.a */; };
 		301BF570109A69640062928A /* www in Resources */ = {isa = PBXBuildFile; fileRef = 301BF56E109A69640062928A /* www */; };
 		301BF5B5109A6A2B0062928A /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF5B4109A6A2B0062928A /* AddressBook.framework */; };
 		301BF5B7109A6A2B0062928A /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 301BF5B6109A6A2B0062928A /* AddressBookUI.framework */; };
@@ -43,21 +42,23 @@
 		30E5649213A7FCAF007403D8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30E5649113A7FCAF007403D8 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C5D0020D16F1DFA7002B4427 /* DGGeofencing.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D0020C16F1DFA7002B4427 /* DGGeofencing.m */; };
 		C5D0021016F1DFB6002B4427 /* DGGeofencingHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D0020F16F1DFB6002B4427 /* DGGeofencingHelper.m */; };
+		C5D5F2C717204B85002C0DFA /* libCordova.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5D5F2C217204B3D002C0DFA /* libCordova.a */; };
+		C5D5F2C917204BC4002C0DFA /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5D5F2C817204BC4002C0DFA /* AssetsLibrary.framework */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		301BF534109A57CC0062928A /* PBXContainerItemProxy */ = {
+		C5D5F2C117204B3D002C0DFA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
+			containerPortal = C5D5F2BD17204B3D002C0DFA /* CordovaLib.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteGlobalIDString = 68A32D7114102E1C006B237C;
 			remoteInfo = CordovaLib;
 		};
-		301BF550109A68C00062928A /* PBXContainerItemProxy */ = {
+		C5D5F2C417204B73002C0DFA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
+			containerPortal = C5D5F2BD17204B3D002C0DFA /* CordovaLib.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = CordovaLib;
@@ -74,7 +75,6 @@
 		1F766FE013BBADB100FB74C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
 		301BF56E109A69640062928A /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = SOURCE_ROOT; };
 		301BF5B4109A6A2B0062928A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		301BF5B6109A6A2B0062928A /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
@@ -108,6 +108,8 @@
 		C5D0020C16F1DFA7002B4427 /* DGGeofencing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGGeofencing.m; sourceTree = "<group>"; };
 		C5D0020E16F1DFB6002B4427 /* DGGeofencingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGGeofencingHelper.h; sourceTree = "<group>"; };
 		C5D0020F16F1DFB6002B4427 /* DGGeofencingHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGGeofencingHelper.m; sourceTree = "<group>"; };
+		C5D5F2BD17204B3D002C0DFA /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
+		C5D5F2C817204BC4002C0DFA /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = GeofencingPluginSample/config.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,7 +119,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
+				C5D5F2C917204BC4002C0DFA /* AssetsLibrary.framework in Frameworks */,
+				C5D5F2C717204B85002C0DFA /* libCordova.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -180,9 +183,9 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				C5D5F2BD17204B3D002C0DFA /* CordovaLib.xcodeproj */,
 				F840E1F0165FE0F500CFE078 /* config.xml */,
 				301BF56E109A69640062928A /* www */,
-				301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				307C750510C5A3420062BCA9 /* Plugins */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -222,6 +225,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5D5F2C817204BC4002C0DFA /* AssetsLibrary.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
@@ -238,14 +242,6 @@
 				30E5649113A7FCAF007403D8 /* CoreMedia.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		301BF52E109A57CC0062928A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				301BF535109A57CC0062928A /* libCordova.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		307C750510C5A3420062BCA9 /* Plugins */ = {
@@ -298,6 +294,14 @@
 			path = se.lproj;
 			sourceTree = "<group>";
 		};
+		C5D5F2BE17204B3D002C0DFA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C5D5F2C217204B3D002C0DFA /* libCordova.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -313,7 +317,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				301BF551109A68C00062928A /* PBXTargetDependency */,
+				C5D5F2C517204B73002C0DFA /* PBXTargetDependency */,
 			);
 			name = GeofencingPluginSample;
 			productName = GeofencingPluginSample;
@@ -346,8 +350,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 301BF52E109A57CC0062928A /* Products */;
-					ProjectRef = 301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */;
+					ProductGroup = C5D5F2BE17204B3D002C0DFA /* Products */;
+					ProjectRef = C5D5F2BD17204B3D002C0DFA /* CordovaLib.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -358,11 +362,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		301BF535109A57CC0062928A /* libCordova.a */ = {
+		C5D5F2C217204B3D002C0DFA /* libCordova.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libCordova.a;
-			remoteRef = 301BF534109A57CC0062928A /* PBXContainerItemProxy */;
+			remoteRef = C5D5F2C117204B3D002C0DFA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -428,10 +432,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		301BF551109A68C00062928A /* PBXTargetDependency */ = {
+		C5D5F2C517204B73002C0DFA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = CordovaLib;
-			targetProxy = 301BF550109A68C00062928A /* PBXContainerItemProxy */;
+			targetProxy = C5D5F2C417204B73002C0DFA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -486,7 +490,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "GeofencingPluginSample/GeofencingPluginSample-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = GeofencingPluginSample;
 				PROVISIONING_PROFILE = "CBB79682-98DD-4400-8C5A-230CD41BE743";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -506,7 +510,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "GeofencingPluginSample/GeofencingPluginSample-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = GeofencingPluginSample;
 				PROVISIONING_PROFILE = "CBB79682-98DD-4400-8C5A-230CD41BE743";
 				TARGETED_DEVICE_FAMILY = "1,2";

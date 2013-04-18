@@ -36,7 +36,7 @@ typedef NSInteger DGLocationAccuracy;
 @property (nonatomic, assign) DGLocationStatus locationStatus;
 @property (nonatomic, retain) CLLocation* locationInfo;
 @property (nonatomic, retain) NSMutableArray* locationCallbacks;
-@property (nonatomic, retain) NSMutableArray* geofenceCallbacks;
+@property (nonatomic, retain) NSMutableDictionary* geofenceCallbacks; // key is fid
 
 @end
 
@@ -54,10 +54,10 @@ typedef NSInteger DGLocationAccuracy;
 - (void) dispose;
 + (NSString*) applicationDocumentsDirectory;
 - (void) returnLocationError: (NSUInteger) errorCode withMessage: (NSString*) message;
-- (void) returnGeofenceError: (NSUInteger) errorCode withMessage: (NSString*) message;
-- (void) returnRegionSuccess;
+- (void) returnGeofenceError: (NSUInteger) errorCode withMessage: (NSString*) message forRegionId:(NSString *)regionId andKeepCallback:(BOOL)keepcallback;
+- (void) returnRegionSuccessForRegion:(NSString *)regionId AndKeepCallbackAsBool:(BOOL)keepcallback;
 - (void) returnLocationSuccess;
-- (void) saveGeofenceCallbackId:(NSString *) callbackId;
+- (void) saveGeofenceCallbackId:(NSString *) callbackId withKey:(NSString *)key;
 - (void) saveLocationCallbackId:(NSString *) callbackId;
 
 @end

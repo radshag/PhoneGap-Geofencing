@@ -197,7 +197,7 @@
     
     NSString* callbackId = command.callbackId;
     
-    [[DGGeofencingHelper sharedGeofencingHelper] saveGeofenceCallbackId:callbackId];
+    [[DGGeofencingHelper sharedGeofencingHelper] saveGeofenceCallbackId:callbackId withKey:[command.arguments objectAtIndex:0]];
     
     [[DGGeofencingHelper sharedGeofencingHelper] setCommandDelegate:self.commandDelegate];
     
@@ -206,7 +206,7 @@
 		BOOL forcePrompt = NO;
 		if (!forcePrompt)
 		{
-            [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: nil];
+            [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: nil forRegionId:[command.arguments objectAtIndex:0] andKeepCallback:NO];
 			return;
 		}
     }
@@ -225,27 +225,28 @@
             }
         }
         //PERMISSIONDENIED is only PositionError that makes sense when authorization denied
-        [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: message];
+        [[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:PERMISSIONDENIED withMessage: message forRegionId:[command.arguments objectAtIndex:0] andKeepCallback:NO];
         
         return;
     } 
     
     if (![self isRegionMonitoringAvailable])
 	{
-		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGUNAVAILABLE withMessage: @"Region monitoring is unavailable"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGUNAVAILABLE withMessage: @"Region monitoring is unavailable" forRegionId:[command.arguments objectAtIndex:0] andKeepCallback:NO];
         return;
     }
     
     if (![self isRegionMonitoringEnabled])
 	{
-		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGPERMISSIONDENIED withMessage: @"User has restricted the use of region monitoring"];
+		[[DGGeofencingHelper sharedGeofencingHelper] returnGeofenceError:REGIONMONITORINGPERMISSIONDENIED withMessage: @"User has restricted the use of region monitoring" forRegionId:[command.arguments objectAtIndex:0] andKeepCallback:NO];
         return;
     }
+    
     NSMutableDictionary *options;
     [command legacyArguments:nil andDict:&options];
     [self addRegionToMonitor:options];
     
-    [[DGGeofencingHelper sharedGeofencingHelper] returnRegionSuccess];
+    [[DGGeofencingHelper sharedGeofencingHelper] returnRegionSuccessForRegion:[command.arguments objectAtIndex:0] AndKeepCallbackAsBool:NO];
 }
 
 - (void) getPendingRegionUpdates:(CDVInvokedUrlCommand*)command {
@@ -302,7 +303,7 @@
     
     NSString* callbackId = command.callbackId;
     
-    [[DGGeofencingHelper sharedGeofencingHelper] saveGeofenceCallbackId:callbackId];
+    //[[DGGeofencingHelper sharedGeofencingHelper] saveGeofenceCallbackId:callbackId];
     
     [[DGGeofencingHelper sharedGeofencingHelper] setCommandDelegate:self.commandDelegate];
     
@@ -350,7 +351,7 @@
     [command legacyArguments:nil andDict:&options];
     [self removeRegionToMonitor:options];
     
-    [[DGGeofencingHelper sharedGeofencingHelper] returnRegionSuccess];
+    [[DGGeofencingHelper sharedGeofencingHelper] returnRegionSuccessAndKeepCallbackAsBool:NO];
 }
 
 - (void)getWatchedRegionIds:(CDVInvokedUrlCommand*)command {
