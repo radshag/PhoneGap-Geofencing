@@ -1,7 +1,7 @@
 PhoneGap-Geofencing
 ===================
 
-Geofencing And Significant Location Change Monitoring Plugin For PhoneGap. iOS Support Only For Now!!!
+Geofencing And Significant Location Change Monitoring Plugin For PhoneGap.
 
 This Phonegap Plugin has been developed by Dov Goldberg of Ogonium.  Feel free to use the code in any projects according the the license at the bottom of this readme.
 
@@ -26,37 +26,43 @@ Using this plugin requires [Cordova iOS](https://github.com/apache/incubator-cor
 2. Drag and drop the DGGeofencing.h and DGGeofencing.m files from the DGGeofencing folder in Finder to your Plugins folder in XCode.
 3. Add the .js files to your `www` folder on disk, and add reference(s) to the .js files using <script> tags in your html file(s)
 
-    <script type="text/javascript" src="/js/plugins/DGGeofencing.js"></script>
+    <script type="text/javascript" src="/js/plugins/Geofencing.js"></script>
 
-4. Add new entry with name `DGGeofencing` and value `DGGeofencing` to `Plugins` in `config.xml`
+4. Add new entry with key `DGGeofencing` and value `DGGeofencing` to `Plugins` in `Cordova.plist/Cordova.plist`
 
 ## INCLUDED FUNTIONS ##
 
 DGGeofencing.js contains the following functions:
 
-1. initCallbackForRegionMonitoring - Initializes the PhoneGap Plugin callback.  
-2. startMonitoringRegion - Starts monitoring a region.
-3. stopMonitoringRegion - Clears an existing region from being monitored.
-4. getWatchedRegionIds - Returns a list of currently monitored region identifiers.
-5. startMonitoringSignificantLocationChanges - Starts monitoring significant location changes.
-6. stopMonitoringSignificantLocationChanges - Stops monitoring significant location changes.
+1. addRegion - Adds a new region to be monitored.
+2. removeRegion - Clears an existing region from being monitored.
+3. getWatchedRegionIds - Returns a list of currently monitored region identifiers.
+4. startMonitoringSignificantLocationChanges - Starts monitoring significant location changes.
+5. stopMonitoringSignificantLocationChanges - Stops monitoring significant location changes.
 
 ## PLUGIN CODE EXAMPLE ##
 
-To add a new region to be monitored use the DGGeofencing startMonitoringRegion function.
+To add a new region to be monitored use the DGGeofencing addRegion function.
 The parameters are:
 
 1. fid - String - This is a unique identifier.
-2. latitude - String - latitude of the region.
-3. longitude - String - latitude of the region.
-4. radius - Integer - Specifies the radius in meters of the region.
+2. radius - Integer - Specifies the radius in meters of the region.
+3. latitude - String - latitude of the region.
+4. longitude - String - latitude of the region.
 
 Example:
 
-	var params = [location.id, location.location.lat, location.location.lng, "10", "3"];
-	DGGeofencing.startMonitoringRegion(params, function(result) {}, function(error) {
-		alert("failed to add region");
-	});
+    var params = {"fid": location.id, "radius": 15, "latitude": location.lat, "longitude": location.lng};
+	console.log(params);
+	DGGeofencing.addRegion(
+		params,
+		function(result) { 
+			console.log("add success");
+      	},
+      	function(error) {   
+	  		alert("failed to add region");
+      	}
+	);
 
 To remove an existing region use the DGGeofencing removeRegion function.
 The parameters are:
@@ -66,15 +72,16 @@ The parameters are:
 
 Example:
 
-	var params = [item.fid, item.latitude, item.longitude];
-	DGGeofencing.stopMonitoringRegion(params, 
-	function(result) {
-
-		// not used.
-
-	}, function(error) {
-		// not used
-	});
+	var params = {"fid": item.fid, "latitude": item.latitude, "longitude": item.longitude};
+	DGGeofencing.removeRegion(
+		params,
+		function(result) { 
+			alert("delete success"); 				   
+		},
+		function(error) {  
+			alert("delete error");   
+		}
+	);
 
 To retrieve the list of identifiers of currently monitored regions use the DGGeofencing getWatchedRegionIds function.
 No parameters.
