@@ -3,7 +3,9 @@ package org.apache.cordova.plugin.geo;
 import android.content.*;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.IBinder;
 import android.util.Log;
+
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.api.CallbackContext;
 import org.apache.cordova.api.CordovaInterface;
@@ -23,43 +25,40 @@ import static org.apache.cordova.plugin.geo.DGGeofencingService.TAG;
  * @author edewit@redhat.com
  */
 public class DGGeofencing extends CordovaPlugin {
-  public static final String PREFS_NAME = "watchedRegionIds";
 
-  public DGGeofencingService service;
   private LocationChangedListener locationChangedListener;
+  public DGGeofencingService service;
   private Location oldLocation;
-  private BroadcastReceiver receiver;
-  private static DGGeofencing instance;
-  private Set<String> regionIds;
 
-  public static DGGeofencing getInstance() {
-    return instance;
-  }
+    private ServiceConnection connection = new ServiceConnection() {
 
-  public DGGeofencing() {
-    instance = this;
-  }
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            DGGeofencingService.LocalBinder binder = (DGGeofencingService.LocalBinder) service;
+            DGGeofencing.this.service = binder.getService();
+        }
 
-  @Override
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        fireRegionChangedEvent(intent);
+    }
+
+    @Override
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
 
-    SharedPreferences settings = cordova.getActivity().getSharedPreferences(PREFS_NAME, 0);
-    regionIds = settings.getStringSet(PREFS_NAME, new HashSet<String>());
-
-    service = new DGGeofencingService(cordova.getActivity());
+    Intent intent = new Intent(cordova.getActivity(), DGGeofencingService.class);
+    cordova.getActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
   }
 
   @Override
   public void onDestroy() {
-    if (receiver != null) {
-      cordova.getActivity().unregisterReceiver(receiver);
-    }
-
-    SharedPreferences settings = cordova.getActivity().getSharedPreferences(PREFS_NAME, 0);
-    SharedPreferences.Editor editor = settings.edit();
-    editor.putStringSet(PREFS_NAME, regionIds);
-    editor.commit();
+    cordova.getActivity().unbindService(connection);
   }
 
   @Override
@@ -71,8 +70,6 @@ public class DGGeofencing extends CordovaPlugin {
         Log.d(TAG, "adding region " + id);
         service.addRegion(id, params.getDouble("latitude"), params.getDouble("longitude"),
                 (float) params.getInt("radius"));
-        registerListener();
-        regionIds.add(id);
         callbackContext.success();
         return true;
       }
@@ -80,13 +77,12 @@ public class DGGeofencing extends CordovaPlugin {
         JSONObject params = parseParameters(data);
         String id = params.getString("fid");
         service.removeRegion(id);
-        regionIds.remove(id);
-        callbackContext.success();
+		callbackContext.success();
         return true;
       }
       if ("getWatchedRegionIds".equals(action)) {
-        callbackContext.success(new JSONArray(regionIds));
-		return true;
+        callbackContext.success(new JSONArray(service.getWachedRegionIds()));
+        return true;
       }
 
       if ("startMonitoringSignificantLocationChanges".equals(action)) {
@@ -107,6 +103,7 @@ public class DGGeofencing extends CordovaPlugin {
       if ("stopMonitoringSignificantLocationChanges".equals(action)) {
         service.removeLocationChangedListener(locationChangedListener);
         callbackContext.success();
+        return true;
       }
 
     } catch (Exception e) {
@@ -121,16 +118,13 @@ public class DGGeofencing extends CordovaPlugin {
 
   void fireLocationChangedEvent(final Location location) {
     Log.d(TAG, "fireLocationChangedEvent");
-    Log.d(TAG, "javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
-    this.webView.sendJavascript("DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
-//    cordova.getActivity().runOnUiThread(new Runnable() {
-//      @Override
-//      public void run() {
-//    	    Log.d(TAG, "javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
-//        webView.loadUrl("javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
-//        oldLocation = location;
-//      }
-//    });
+    cordova.getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        webView.loadUrl("javascript:DGGeofencing.locationMonitorUpdate(" + createLocationEvent(location) + ")");
+        oldLocation = location;
+      }
+    });
   }
 
   private String createLocationEvent(Location location) {
@@ -158,46 +152,19 @@ public class DGGeofencing extends CordovaPlugin {
     object.put(prefix + "_longitude", location.getLongitude());
   }
 
-  private void registerListener() {
-    IntentFilter filter = new IntentFilter(DGGeofencingService.PROXIMITY_ALERT_INTENT);
-    receiver = new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, final Intent intent) {
-        fireRegionChangedEvent(intent);
-      }
-    };
-    cordova.getActivity().registerReceiver(receiver, filter);
-  }
-
   void fireRegionChangedEvent(final Intent intent) {
-	  String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
-	  String id = (String) intent.getExtras().get("id");
-	  Log.d(TAG, "javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
-	  this.webView.sendJavascript("DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
-//    cordova.getActivity().runOnUiThread(new Runnable() {
-//      @Override
-//      public void run() {
-//        String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
-//        String id = (String) intent.getExtras().get("id");
-//	    Log.d(TAG, "javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
-//        webView.loadUrl("javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
-//      }
-//    });
+    cordova.getActivity().runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        String status = intent.getStringExtra("staus");
+        String id = intent.getStringExtra("id");
+        webView.loadUrl("javascript:DGGeofencing.regionMonitorUpdate(" + createRegionEvent(id, status) + ")");
+      }
+    });
   }
 
   private String createRegionEvent(String id, String status) {
-	  	JSONObject event = new JSONObject();
-	  	try {
-			event.put("fid", id);
-			event.put("status", status);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException("region could not be serialized to json", e);
-		}
-	  	
-	  
-	  	return event.toString();
+    return "{fid:" + id + ",status:\"" + status + "\"}";
   }
 
   private JSONObject parseParameters(JSONArray data) throws JSONException {
