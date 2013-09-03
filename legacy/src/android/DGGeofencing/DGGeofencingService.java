@@ -2,11 +2,13 @@ package org.apache.cordova.plugin.geo;
 
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -68,13 +70,15 @@ public class DGGeofencingService extends Service implements LocationListener {
     }
 
     public void removeRegion(String id) {
-    PendingIntent proximityIntent = createIntent(id);
-    locationManager.removeProximityAlert(proximityIntent);
+      geofenceStore.clearGeofence(id);
+      PendingIntent proximityIntent = createIntent(id);
+      locationManager.removeProximityAlert(proximityIntent);
   }
 
   private PendingIntent createIntent(String id) {
     Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
-    intent.putExtra("id", id);
+    Uri uri = new Uri.Builder().appendPath("proximity").appendPath(id).build();
+    intent.setDataAndType(uri, "vnd.geofencing.region/update");
     return PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
   }
 

@@ -28,7 +28,7 @@
         <receiver android:name=".ProximityReceiver">
             <intent-filter>
                 <action android:name="geoFencingProximityAlert" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.geofencing.region/*"/>
             </intent-filter>
         </receiver>
         <receiver android:name=".StartServiceAtBootReceiver">

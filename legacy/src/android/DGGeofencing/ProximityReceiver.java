@@ -2,6 +2,7 @@ package org.apache.cordova.plugin.geo;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,28 +19,25 @@ public class ProximityReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    String id = intent.getStringExtra("id");
+    String id = intent.getData().getLastPathSegment();
     Log.d(TAG, "received proximity alert for region " + id);
 
-//    NotificationManager notificationManager =
-//            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    Intent cordovaIntent = new Intent(context.getApplicationContext(), HelloCordova.class);
+    cordovaIntent.putExtra("id", id);
+    String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
+    cordovaIntent.putExtra("status", status);
+    cordovaIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-//    Intent pluginIntent = new Intent(context, HelloCordova.class);
-//      Intent pluginIntent = new Intent(Intent.ACTION_VIEW);
-//    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, pluginIntent, FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
+//    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, cordovaIntent, 0);
 //    Notification notification = createNotification();
+//    NotificationManager notificationManager =
+//              (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 //    notification.setLatestEventInfo(context,
 //            "Proximity Alert!", "You are near your point of interest.", pendingIntent);
-
+//
 //    notificationManager.notify(1000, notification);
 
-      Intent cordovaIntent = new Intent(context.getApplicationContext(), HelloCordova.class);
-      cordovaIntent.putExtra("id", id);
-      String status = intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false) ? "enter" : "left";
-      cordovaIntent.putExtra("status", status);
-      cordovaIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      context.startActivity(cordovaIntent);
+    context.startActivity(cordovaIntent);
   }
 
   private Notification createNotification() {
