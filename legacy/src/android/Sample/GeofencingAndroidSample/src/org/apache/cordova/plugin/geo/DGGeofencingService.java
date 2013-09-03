@@ -1,17 +1,18 @@
 package org.apache.cordova.plugin.geo;
 
-import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -19,8 +20,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 /**
  * @author edewit@redhat.com
  */
-public class DGGeofencingService implements LocationListener {
-  public static final int INTERFAL_TIME = 60000;
+public class DGGeofencingService extends Service implements LocationListener {
+  public static final int INTERVAL_TIME = 60000;
   public static final int MIN_DISTANCE = 10;
   static final String TAG = DGGeofencingService.class.getSimpleName();
 
@@ -28,24 +29,45 @@ public class DGGeofencingService implements LocationListener {
 
   private LocationManager locationManager;
   private Set<LocationChangedListener> listeners = new HashSet<LocationChangedListener>();
-  private final Context context;
 
-  public DGGeofencingService(Context context) {
-    this.context = context;
-    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    if (location != null) {
-      onLocationChanged(location);
+    private final IBinder binder = new LocalBinder();
+    private GeofenceStore geofenceStore;
+
+    public class LocalBinder extends Binder {
+        DGGeofencingService getService() {
+            return DGGeofencingService.this;
+        }
     }
-    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, INTERFAL_TIME, MIN_DISTANCE, this);
-  }
+
+    @Override
+    public void onCreate() {
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            onLocationChanged(location);
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, INTERVAL_TIME, MIN_DISTANCE, this);
+
+        geofenceStore = new GeofenceStore(getApplicationContext());
+        for (String id : geofenceStore.getGeofences()) {
+            Geofence fence = geofenceStore.getGeofence(id);
+            addFence(id, fence);
+        }
+    }
 
   public void addRegion(String id, double latitude, double longitude, float radius) {
-    PendingIntent proximityIntent = createIntent(id);
-    locationManager.addProximityAlert(latitude, longitude, radius, -1, proximityIntent);
+      Geofence geofence = new Geofence(id, latitude, longitude, radius);
+      geofenceStore.setGeofence(id, geofence);
+      addFence(id, geofence);
   }
 
-  public void removeRegion(String id) {
+    private void addFence(String id, Geofence geofence) {
+        PendingIntent proximityIntent = createIntent(id);
+        locationManager.addProximityAlert(geofence.getLatitude(), geofence.getLongitude(),
+                geofence.getRadius(), geofence.getExpirationDuration(), proximityIntent);
+    }
+
+    public void removeRegion(String id) {
     PendingIntent proximityIntent = createIntent(id);
     locationManager.removeProximityAlert(proximityIntent);
   }
@@ -53,7 +75,7 @@ public class DGGeofencingService implements LocationListener {
   private PendingIntent createIntent(String id) {
     Intent intent = new Intent(PROXIMITY_ALERT_INTENT);
     intent.putExtra("id", id);
-    return PendingIntent.getBroadcast(this.context, 0, intent, FLAG_ACTIVITY_NEW_TASK);
+    return PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
   }
 
   public void addLocationChangedListener(LocationChangedListener listener) {
@@ -64,9 +86,13 @@ public class DGGeofencingService implements LocationListener {
     this.listeners.remove(listener);
   }
 
+  public Set<String> getWachedRegionIds() {
+    return new HashSet<String>(geofenceStore.getGeofences());
+  }
+
   @Override
   public void onLocationChanged(Location location) {
-    String text = String.format(Locale.getDefault(), "\nLat:\t %f\nLong:\t %f\nAlt:\t %f\nBearing:\t %f", location.getLatitude(),
+    String text = String.format("\nLat:\t %f\nLong:\t %f\nAlt:\t %f\nBearing:\t %f", location.getLatitude(),
             location.getLongitude(), location.getAltitude(), location.getBearing());
     Log.d(TAG, "onLocationChanged with location " + text);
 
@@ -86,4 +112,9 @@ public class DGGeofencingService implements LocationListener {
   @Override
   public void onProviderDisabled(String s) {
   }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
 }
