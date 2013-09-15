@@ -44,14 +44,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="17"/>
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:allowBackup="false"
         android:hardwareAccelerated="true">
         <activity android:name="Geofencing" android:label="@string/app_name"
                 android:theme="@android:style/Theme.Black.NoTitleBar"
-                android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale">
+                android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -63,6 +63,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+        <receiver android:name="org.apache.cordova.plugin.geo.StartServiceAtBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service android:name="org.apache.cordova.plugin.geo.DGGeofencingService" android:enabled="true"/>
     </application>
 
 </manifest> 
