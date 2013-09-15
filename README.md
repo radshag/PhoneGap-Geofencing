@@ -50,6 +50,7 @@ The parameters are:
 2. latitude - String - latitude of the region.
 3. longitude - String - latitude of the region.
 4. radius - Integer - Specifies the radius in meters of the region.
+5. accuracy - Integer - Specifies the accuracy in meters.
 
 Example:
 
