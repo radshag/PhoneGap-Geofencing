@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="com.ogonium.goldberg.dov.geofencing" version="0.3.5">
+    <name>DGGeofencing</name>
+    <description>Cordova Geofencing Plugin</description>
+    <author>Dov Goldberg</author>
+    <license>The MIT License</license>
+    <keywords>cordova,geofencing,geofence</keywords>
+    <js-module src="www/DGGeofencing.js" name="DGGeofencing">
+        <clobbers target="DGGeofencing" />
+    </js-module>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="DGGeofencing">
+                <param name="ios-package" value="DGGeofencing"/>
+            </feature>
+        </config-file>
+        <header-file src="src/ios/DGGeofencing.h" />
+        <source-file src="src/ios/DGGeofencing.m" />
+    </platform>
+</plugin>
