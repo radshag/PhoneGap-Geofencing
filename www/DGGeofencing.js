@@ -73,3 +73,13 @@ DGGeofencing.prototype.stopMonitoringSignificantLocationChanges = function(succe
 		return Cordova.exec(success, fail, "DGGeofencing", "stopMonitoringSignificantLocationChanges", []);
 	};
 
+DGGeofencing.install = function () {
+    if (!window.plugins) {
+        window.plugins = {};
+    }
+
+    window.plugins.DGGeofencing = new DGGeofencing();
+    return window.plugins.DGGeofencing;
+};
+
+cordova.addConstructor(DGGeofencing.install);
