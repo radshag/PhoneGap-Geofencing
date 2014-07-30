@@ -17,7 +17,7 @@ function DGGeofencing() {
      */
 DGGeofencing.prototype.initCallbackForRegionMonitoring = function(params, success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "initCallbackForRegionMonitoring", params);
-	}
+	};
 
 /*
      Params:
@@ -29,7 +29,7 @@ DGGeofencing.prototype.initCallbackForRegionMonitoring = function(params, succes
      */
 DGGeofencing.prototype.startMonitoringRegion = function(params, success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "startMonitoringRegion", params);
-	}
+	};
 
 /*
 	Params:
@@ -39,7 +39,7 @@ DGGeofencing.prototype.startMonitoringRegion = function(params, success, fail) {
 	*/
     DGGeofencing.prototype.stopMonitoringRegion = function(params, success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "stopMonitoringRegion", params);
-	}
+	};
 
 /*
 	Params:
@@ -47,7 +47,7 @@ DGGeofencing.prototype.startMonitoringRegion = function(params, success, fail) {
 	*/
 DGGeofencing.prototype.getWatchedRegionIds = function(success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
-	}
+	};
 
 /*
 	Params:
@@ -55,7 +55,7 @@ DGGeofencing.prototype.getWatchedRegionIds = function(success, fail) {
 	*/
 DGGeofencing.prototype.getPendingRegionUpdates = function(success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
-	}
+	};
 
 /*
 	Params:
@@ -63,7 +63,7 @@ DGGeofencing.prototype.getPendingRegionUpdates = function(success, fail) {
 	*/
 DGGeofencing.prototype.startMonitoringSignificantLocationChanges = function(success, fail) {
 		return Cordova.exec(success, fail, "DGGeofencing", "startMonitoringSignificantLocationChanges", []);
-	}
+	};
 
 /*
 	Params:
@@ -71,5 +71,5 @@ DGGeofencing.prototype.startMonitoringSignificantLocationChanges = function(succ
 	*/
 DGGeofencing.prototype.stopMonitoringSignificantLocationChanges = function(success, fail) {
 		return Cordova.exec(success, fail, "DGGeofencing", "stopMonitoringSignificantLocationChanges", []);
-	}
-};
+	};
+
