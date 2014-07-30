@@ -13,7 +13,7 @@ var DGGeofencing = {
      NONE
      */
 	initCallbackForRegionMonitoring: function(params, success, fail) {
-		return Cordova.exec(success, fail, "DGGeofencing", "initCallbackForRegionMonitoring", params);
+		return cordova.exec(success, fail, "DGGeofencing", "initCallbackForRegionMonitoring", params);
 	},
 
 /*
@@ -25,7 +25,7 @@ var DGGeofencing = {
      #define KEY_REGION_ACCURACY @"accuracy"
      */
 	startMonitoringRegion: function(params, success, fail) {
-		return Cordova.exec(success, fail, "DGGeofencing", "startMonitoringRegion", params);
+		return cordova.exec(success, fail, "DGGeofencing", "startMonitoringRegion", params);
 	},
 
 /*
@@ -35,7 +35,7 @@ var DGGeofencing = {
     #define KEY_REGION_LNG     @"longitude"
 	*/
 	stopMonitoringRegion: function(params, success, fail) {
-		return Cordova.exec(success, fail, "DGGeofencing", "stopMonitoringRegion", params);
+		return cordova.exec(success, fail, "DGGeofencing", "stopMonitoringRegion", params);
 	},
 
 /*
@@ -43,7 +43,7 @@ var DGGeofencing = {
 	NONE
 	*/
 	getWatchedRegionIds: function(success, fail) {
-		return Cordova.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
+		return cordova.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
 	},
 
 /*
@@ -51,7 +51,7 @@ var DGGeofencing = {
 	NONE
 	*/
 	getPendingRegionUpdates: function(success, fail) {
-		return Cordova.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
+		return cordova.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
 	},
 
 /*
