@@ -7,14 +7,17 @@
  * dov.goldberg@ogonium.com
  *
  */
-var DGGeofencing = {
+
+function DGGeofencing() {
+}
+
 /*
      Params:
      NONE
      */
-	initCallbackForRegionMonitoring: function(params, success, fail) {
+DGGeofencing.prototype.initCallbackForRegionMonitoring = function(params, success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "initCallbackForRegionMonitoring", params);
-	},
+	}
 
 /*
      Params:
@@ -24,9 +27,9 @@ var DGGeofencing = {
      #define KEY_REGION_RADIUS   @"radius"
      #define KEY_REGION_ACCURACY @"accuracy"
      */
-	startMonitoringRegion: function(params, success, fail) {
+DGGeofencing.prototype.startMonitoringRegion = function(params, success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "startMonitoringRegion", params);
-	},
+	}
 
 /*
 	Params:
@@ -34,39 +37,39 @@ var DGGeofencing = {
 	#define KEY_REGION_LAT     @"latitude"
     #define KEY_REGION_LNG     @"longitude"
 	*/
-	stopMonitoringRegion: function(params, success, fail) {
+    DGGeofencing.prototype.stopMonitoringRegion = function(params, success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "stopMonitoringRegion", params);
-	},
+	}
 
 /*
 	Params:
 	NONE
 	*/
-	getWatchedRegionIds: function(success, fail) {
+DGGeofencing.prototype.getWatchedRegionIds = function(success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
-	},
+	}
 
 /*
 	Params:
 	NONE
 	*/
-	getPendingRegionUpdates: function(success, fail) {
+DGGeofencing.prototype.getPendingRegionUpdates = function(success, fail) {
 		return cordova.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
-	},
+	}
 
 /*
 	Params:
 	NONE
 	*/
-	startMonitoringSignificantLocationChanges: function(success, fail) {
+DGGeofencing.prototype.startMonitoringSignificantLocationChanges = function(success, fail) {
 		return Cordova.exec(success, fail, "DGGeofencing", "startMonitoringSignificantLocationChanges", []);
-	},
+	}
 
 /*
 	Params:
 	NONE
 	*/
-	stopMonitoringSignificantLocationChanges: function(success, fail) {
+DGGeofencing.prototype.stopMonitoringSignificantLocationChanges = function(success, fail) {
 		return Cordova.exec(success, fail, "DGGeofencing", "stopMonitoringSignificantLocationChanges", []);
 	}
 };
