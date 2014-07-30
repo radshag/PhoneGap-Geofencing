@@ -4,7 +4,7 @@
     <name>DGGeofencing</name>
     <description>Cordova Geofencing Plugin</description>
     <author>Dov Goldberg</author>
-    <license>The MIT License</license>
+    <license>Apache License, Version 2.0</license>
     <keywords>cordova,geofencing,geofence</keywords>
     <js-module src="www/DGGeofencing.js" name="DGGeofencing">
         <clobbers target="DGGeofencing" />

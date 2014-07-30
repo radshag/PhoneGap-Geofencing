@@ -1,4 +1,11 @@
-
+/**
+ *
+ * Phonegap Geofencing Plugin
+ * Copyright (c) Dov Goldberg 2014
+ * http://www.ogonium.com
+ * dov.goldberg@ogonium.com
+ *
+ */
 #import <CoreLocation/CoreLocation.h>
 #import <Cordova/CDVPlugin.h>
 
