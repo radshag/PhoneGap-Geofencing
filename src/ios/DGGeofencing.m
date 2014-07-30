@@ -6,7 +6,7 @@
  * dov.goldberg@ogonium.com
  *
  */
- 
+
 #import "DGGeofencing.h"
 
 @implementation DGLocationData

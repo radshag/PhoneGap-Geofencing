@@ -213,6 +213,7 @@ A big thank you to [@edewit](https://github.com/edewit) for authoring the Androi
 ## LICENSE ##
 
 Copyright (c) 2014 Dov Goldberg
+
 EMAIL: dov.goldberg@ogonium.com   
 WEBSITE: http://www.ogonium.com
 
