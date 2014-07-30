@@ -196,19 +196,15 @@ In order to retrieve these pending region notifications follow these instruction
 ## USAGE SAMPLE CODE ##
 
 Feel free to take a look at a project I have made that uses the above plugin.
-You can find this project in my github repository [Phonegap-Geofencing](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/Sample). 
+You can find this project in my github repository [Phonegap-Geofencing](https://github.com/radshag/DGGeofencing-Sample).
 
 ## QUESTIONS AND COMMENTS ##
 
 All questions and comments are welcome.  Please do so on my [GitHub Page](https://github.com/radshag/PhoneGap-Geofencing/issues).
 
-The latest version of the DGGeofencing plugin can always be found [here](https://github.com/radshag/PhoneGap-Geofencing/tree/master/iOS/DGGeofencing).
+The latest version of the DGGeofencing plugin can always be found [here](https://github.com/radshag/PhoneGap-Geofencing/).
 
 If you would like to have me consult on a project you can always reach me at dov.goldberg@ogonium.com.
-
-## THANKS ##
-
-A big thank you to [@edewit](https://github.com/edewit) for authoring the Android DGGeofencing PhoneGap Plugin.
 
 ## LICENSE ##
 
