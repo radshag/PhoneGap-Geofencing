@@ -1,7 +1,7 @@
 PhoneGap-Geofencing
 ===================
 
-Geofencing And Significant Location Change Monitoring Plugin For PhoneGap. iOS Support Only For Now!!!
+Geofencing And Significant Location Change Monitoring Plugin For PhoneGap.
 
 This Phonegap Plugin has been developed by Dov Goldberg of Ogonium.  Feel free to use the code in any projects according the the license at the bottom of this readme.
 
@@ -196,7 +196,7 @@ In order to retrieve these pending region notifications follow these instruction
 ## USAGE SAMPLE CODE ##
 
 Feel free to take a look at a project I have made that uses the above plugin.
-You can find this project in my github repository [Phonegap-Geofencing](https://github.com/radshag/DGGeofencing-Sample).
+You can find this project in my github repository [DGGeofencing-Sample](https://github.com/radshag/DGGeofencing-Sample).
 
 ## QUESTIONS AND COMMENTS ##
 
