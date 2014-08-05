@@ -147,7 +147,7 @@
     NSString *latitude = [command.arguments objectAtIndex:1];
     NSString *longitude = [command.arguments objectAtIndex:2];
     double radius = [[command.arguments objectAtIndex:3] doubleValue];
-    CLLocationAccuracy accuracy = [[command.arguments objectAtIndex:4] floatValue];
+    //CLLocationAccuracy accuracy = [[command.arguments objectAtIndex:4] floatValue];
     
     DGLocationData* lData = self.locationData;
     NSString *callbackId = [lData.geofencingCallbacks objectAtIndex:0];

@@ -22,13 +22,15 @@ Geofencing is a way to monitor geographic regions.  In iOS it allows an app to b
 
 Using this plugin requires [Cordova iOS](https://github.com/apache/incubator-cordova-ios).
 
-1. Make sure your Xcode project has been [updated for Cordova](https://github.com/apache/incubator-cordova-ios/blob/master/guides/Cordova%20Upgrade%20Guide.md)
-2. Drag and drop the DGGeofencing.h and DGGeofencing.m files from the DGGeofencing folder in Finder to your Plugins folder in XCode.
-3. Add the .js files to your `www` folder on disk, and add reference(s) to the .js files using <script> tags in your html file(s)
+To install the plugin in your app, execute the following (replace variables where necessary)...
 
-    <script type="text/javascript" src="/js/plugins/DGGeofencing.js"></script>
+	cordova create myApp
 
-4. Add new entry with name `DGGeofencing` and value `DGGeofencing` to `Plugins` in `config.xml`
+	cd myApp/
+
+	cordova platform add ios
+
+	cordova -d plugin https://github.com/radshag/PhoneGap-Geofencing.git
 
 ## INCLUDED FUNTIONS ##
 
@@ -37,9 +39,8 @@ DGGeofencing.js contains the following functions:
 1. initCallbackForRegionMonitoring - Initializes the PhoneGap Plugin callback.  
 2. startMonitoringRegion - Starts monitoring a region.
 3. stopMonitoringRegion - Clears an existing region from being monitored.
-4. getWatchedRegionIds - Returns a list of currently monitored region identifiers.
-5. startMonitoringSignificantLocationChanges - Starts monitoring significant location changes.
-6. stopMonitoringSignificantLocationChanges - Stops monitoring significant location changes.
+4. startMonitoringSignificantLocationChanges - Starts monitoring significant location changes.
+5. stopMonitoringSignificantLocationChanges - Stops monitoring significant location changes.
 
 ## PLUGIN CODE EXAMPLE ##
 
@@ -50,11 +51,10 @@ The parameters are:
 2. latitude - String - latitude of the region.
 3. longitude - String - latitude of the region.
 4. radius - Integer - Specifies the radius in meters of the region.
-5. accuracy - Integer - Specifies the accuracy in meters.
 
 Example:
 
-	var params = [location.id, location.location.lat, location.location.lng, "10", "3"];
+	var params = [location.id, location.location.lat, location.location.lng, "10"];
 	DGGeofencing.startMonitoringRegion(params, function(result) {}, function(error) {
 		alert("failed to add region");
 	});
@@ -77,21 +77,6 @@ Example:
 		// not used
 	});
 
-To retrieve the list of identifiers of currently monitored regions use the DGGeofencing getWatchedRegionIds function.
-No parameters.
-
-The result object contains an array of strings in regionids 
-
-Example:
-
-	DGGeofencing.getWatchedRegionIds(
-		function(result) { 
-			alert("success: " + result.regionids); 				   
-		},
-		function(error) {  
-			alert("error");   
-		}
-	);
 
 To start monitoring signifaction location changes use the DGGeofencing startMonitoringSignificantLocationChanges function.
 No parameters.
@@ -123,75 +108,7 @@ Example:
 	
 ## HOW TO SETUP REGION AND LOCATION NOTIFICATIONS ##
 
-Of course adding and removing monitored regions would be useless without the ability to receive real time notifications when region boundries are crossed.
-This setup will allow the JavaScript to receive updates both when the app is running and not running.
 
-Follow these steps to setup region notifications when the app is running:
-
-1. Drag and drop the DGGeofencingHelper.h and DGGeofencingHelper.m files from the DGGeofencing folder in Finder to your Plugins folder in XCode.
-2. Add the following code to the viewDidLoad function in the MainViewController.m file after [super viewDidLoad];
-	
-	<pre>[[DGGeofencingHelper sharedGeofencingHelper] setWebView:self.webView];</pre>
-
-3. Make sure to import DGGeofencingHelper.h in the MainViewController.m file.
-4. In your JavaScript add the following code in the same place where you process the documentReady event.
-
-	<pre>document.addEventListener("region-update", function(event) {
-		var fid = event.regionupdate.fid;
-		var status = event.regionupdate.status;
-	});</pre>
-
-5. For location changes add the following code in your JavaScript code in the same place where you process the documentReady event.
-
-	<pre>document.addEventListener('location-update', function(event) {
-		var new_timestamp = event.locationupdate.new_timestamp;
-		var new_speed = event.locationupdate.new_speed;
-		var new_course = event.locationupdate.new_course;
-		var new_verticalAccuracy = event.locationupdate.new_verticalAccuracy;
-		var new_horizontalAccuracy = event.locationupdate.new_horizontalAccuracy;
-		var new_altitude = event.locationupdate.new_altitude;
-		var new_latitude = event.locationupdate.new_latitude;
-		var new_longitude = event.locationupdate.new_longitude;
-			
-		var old_timestamp = event.locationupdate.old_timestamp;
-		var old_speed = event.locationupdate.old_speed;
-		var old_course = event.locationupdate.old_course;
-		var old_verticalAccuracy = event.locationupdate.old_verticalAccuracy;
-		var old_horizontalAccuracy = event.locationupdate.old_horizontalAccuracy;
-		var old_altitude = event.locationupdate.old_altitude;
-		var old_latitude = event.locationupdate.old_latitude;
-		var old_longitude = event.locationupdate.old_longitude;
-			
-		console.log("Location Update Event: " + event);	
-	});</pre>
-
-When the app is not running, even in the background,  region notifications are saved as they come in.
-In order to retrieve these pending region notifications follow these instructions.
-
-1. Add the following code in the app delegate - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
-
-<pre>if ([[launchOptions allKeys] containsObject:UIApplicationLaunchOptionsLocationKey]) {
-    [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:YES];
-} else {
-    [[DGGeofencingHelper sharedGeofencingHelper] setDidLaunchForRegionUpdate:NO];
-}</pre>
-
-2. In the JavaScript you will need to use the following code to retrieve these notifications.
-
-    <pre>    DGGeofencing.getPendingRegionUpdates(
-			function(result) { 
-				var updates = result.pendingupdates;
-				$(updates).each(function(index, update){
-					var fid = update.fid;
-					var status = update.status;
-					var timestamp = update.timestamp;
-					console.log("fid: " + fid + " status: " + status + " timestamp: " + timestamp);
-				});   
-	      	},
-	      	function(error) {   
-		  		alert("failed");
-	      	}
-		);</pre>
 	
 ## USAGE SAMPLE CODE ##
 

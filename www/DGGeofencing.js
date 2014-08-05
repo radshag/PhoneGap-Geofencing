@@ -25,7 +25,7 @@ DGGeofencing.prototype.initCallbackForRegionMonitoring = function (params, succe
  #define KEY_REGION_LAT      @"latitude"
  #define KEY_REGION_LNG      @"longitude"
  #define KEY_REGION_RADIUS   @"radius"
- #define KEY_REGION_ACCURACY @"accuracy"
+ //#define KEY_REGION_ACCURACY @"accuracy" // not implemented!
  */
 DGGeofencing.prototype.startMonitoringRegion = function (params, success, fail) {
     return Cordova.exec(success, fail, "DGGeofencing", "startMonitoringRegion", params);
@@ -45,17 +45,21 @@ DGGeofencing.prototype.stopMonitoringRegion = function (params, success, fail) {
  Params:
  NONE
  */
+/*
 DGGeofencing.prototype.getWatchedRegionIds = function (success, fail) {
     return Cordova.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
 };
+*/
 
 /*
  Params:
  NONE
  */
+ /*
 DGGeofencing.prototype.getPendingRegionUpdates = function (success, fail) {
     return Cordova.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
 };
+*/
 
 /*
  Params:
