@@ -108,6 +108,48 @@ Example:
 	
 ## HOW TO SETUP REGION AND LOCATION NOTIFICATIONS ##
 
+Example:
+
+// gets called when region monitoring event is submitted from iOS
+function processRegionMonitorCallback (result) {
+    var callbacktype = result.callbacktype;
+
+    if (callbacktype == "initmonitor") {
+
+    } else if (callbacktype == "locationupdate") {
+
+    } else if (callbacktype == "monitorremoved") {
+
+    } else if (callbacktype == "monitorfail") {
+
+    } else if (callbacktype == "monitorstart") {
+
+    } else if (callbacktype == "enter") {
+    	console.log(result);
+
+    } else if (callbacktype == "exit") {
+       console.log(result);
+
+    }
+}
+
+// setup 1 region for monitoring on deviceready
+function onDeviceReady () {
+
+    window.plugins.DGGeofencing.initCallbackForRegionMonitoring(new Array(), processRegionMonitorCallback, function(error) {
+        console.log("init error");
+    });
+
+    var params = ['1', '40.781552', '-73.967171', "150"];
+    window.plugins.DGGeofencing.startMonitoringRegion(params, function(result) { console.log('watching');}, function(error) {
+        console.log("failed to add region");
+    });
+
+}
+
+document.addEventListener("deviceready", onDeviceReady, false);
+
+
 
 	
 ## USAGE SAMPLE CODE ##
