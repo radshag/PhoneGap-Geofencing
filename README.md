@@ -110,6 +110,8 @@ Example:
 
 Example:
 
+
+```
 // gets called when region monitoring event is submitted from iOS
 function processRegionMonitorCallback (result) {
     var callbacktype = result.callbacktype;
@@ -148,7 +150,7 @@ function onDeviceReady () {
 }
 
 document.addEventListener("deviceready", onDeviceReady, false);
-
+```
 
 
 	
