@@ -120,6 +120,26 @@ function processRegionMonitorCallback (result) {
 
     } else if (callbacktype == "locationupdate") {
 
+    	var fid = result.regionId;
+		
+		var new_timestamp = result.new_timestamp;
+		var new_speed = result.new_speed;
+		var new_course = result.new_course;
+		var new_verticalAccuracy = result.new_verticalAccuracy;
+		var new_horizontalAccuracy = result.new_horizontalAccuracy;
+		var new_altitude = result.new_altitude;
+		var new_latitude = result.new_latitude;
+		var new_longitude = result.new_longitude;
+
+		var old_timestamp = result.old_timestamp;
+		var old_speed = result.old_speed;
+		var old_course = result.old_course;
+		var old_verticalAccuracy = result.old_verticalAccuracy;
+		var old_horizontalAccuracy = result.old_horizontalAccuracy;
+		var old_altitude = result.old_altitude;
+		var old_latitude = result.old_latitude;
+		var old_longitude = result.old_longitude;
+
     } else if (callbacktype == "monitorremoved") {
 
     } else if (callbacktype == "monitorfail") {
@@ -127,10 +147,18 @@ function processRegionMonitorCallback (result) {
     } else if (callbacktype == "monitorstart") {
 
     } else if (callbacktype == "enter") {
-    	console.log(result);
+
+    	//result.callbacktype
+       	//result.regionId
+       	//result.message
+       	//result.timestamp
 
     } else if (callbacktype == "exit") {
-       console.log(result);
+
+       	//result.callbacktype
+       	//result.regionId
+       	//result.message
+       	//result.timestamp
 
     }
 }
