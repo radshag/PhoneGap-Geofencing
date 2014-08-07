@@ -58,9 +58,17 @@
 
 - (BOOL) isRegionMonitoringAvailable
 {
-	BOOL regionMonitoringAvailableClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringAvailable)];
-    if (regionMonitoringAvailableClassPropertyAvailable)
-    {
+    // iOS 4.x, iOS 5.x, iOS 6.x
+    BOOL regionMonitoringAvailableClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringAvailable)];
+    // iOS 7.0+
+    BOOL regionMonitoringAvailableForClassClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(isMonitoringAvailableForClass:)];
+    
+    if (regionMonitoringAvailableForClassClassPropertyAvailable)
+    { // iOS 7.0+
+        BOOL regionMonitoringAvailable = [CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]];
+        return  (regionMonitoringAvailable);
+    } else if (regionMonitoringAvailableClassPropertyAvailable)
+    { // iOS 4.x, iOS 5.x, iOS 6.x
         BOOL regionMonitoringAvailable = [CLLocationManager regionMonitoringAvailable];
         return  (regionMonitoringAvailable);
     }

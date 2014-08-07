@@ -108,8 +108,10 @@ Example:
 	
 ## HOW TO SETUP REGION AND LOCATION NOTIFICATIONS ##
 
-Example:
+Of course adding and removing monitored regions would be useless without the ability to receive real time notifications when region boundries are crossed.
+This setup will allow the JavaScript to receive updates both when the app is running and not running.
 
+Example:
 
 ```
 // gets called when region monitoring event is submitted from iOS
