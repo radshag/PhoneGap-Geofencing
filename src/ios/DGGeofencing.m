@@ -79,9 +79,14 @@
 
 - (BOOL) isRegionMonitoringEnabled
 {
-	BOOL regionMonitoringEnabledClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringEnabled)];
-    if (regionMonitoringEnabledClassPropertyAvailable)
-    {
+	BOOL regionMonitoringEnabledClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringEnabled)]; // iOS 4.0, 4.1
+    BOOL authorizationStatusClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(authorizationStatus)]; // iOS 4.2+
+    if (authorizationStatusClassPropertyAvailable)
+    { // iOS 4.2+
+        NSUInteger authStatus = [CLLocationManager authorizationStatus];
+        return  (authStatus == kCLAuthorizationStatusAuthorized) || (authStatus == kCLAuthorizationStatusNotDetermined);
+    } else if (regionMonitoringEnabledClassPropertyAvailable)
+    { // iOS 4.0, 4.1
         BOOL regionMonitoringEnabled = [CLLocationManager regionMonitoringEnabled];
         return  (regionMonitoringEnabled);
     }
@@ -194,7 +199,20 @@
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
     } else {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-        CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:radius identifier:regionId];
+        if(radius > locationManager.maximumRegionMonitoringDistance)
+        {
+            radius = locationManager.maximumRegionMonitoringDistance;
+        }
+        NSString *version = [[UIDevice currentDevice] systemVersion];
+        CLRegion *region = nil;
+ 
+        if ([version floatValue] >= 7.0f) //for iOS7
+        {
+            region =  [[CLCircularRegion alloc] initWithCenter:coord radius:radius identifier:regionId];
+        } else // iOS 7 below
+        {
+            region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:radius identifier:regionId];
+        }
         [self.locationManager startMonitoringForRegion:region];
     }
 }
@@ -208,7 +226,15 @@
     NSString *longitude = [command.arguments objectAtIndex:2];
     
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-    CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:10.0 identifier:regionId];
+    NSString *version = [[UIDevice currentDevice] systemVersion];
+    CLRegion *region = nil;
+    if ([version floatValue] >= 7.0f) //for iOS7
+    {
+        region =  [[CLCircularRegion alloc] initWithCenter:coord radius:10.0 identifier:regionId];
+    } else // iOS 7 below
+    {
+        region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:10.0 identifier:regionId];
+    }
     [[self locationManager] stopMonitoringForRegion:region];
     
     // return success to callback
