@@ -1,21 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="com.ogonium.goldberg.dov.geofencing" version="0.3.5">
+        id="com.ogonium.goldberg.dov.geofencing" version="0.3.6">
+
     <name>DGGeofencing</name>
     <description>Cordova Geofencing Plugin</description>
+    <repo>https://github.com/radshag/PhoneGap-Geofencing.git</repo>
     <author>Dov Goldberg</author>
     <license>Apache License, Version 2.0</license>
-    <keywords>cordova,geofencing,geofence</keywords>
+    <keywords>cordova, phonegap, geofencing, geofence</keywords>
+
     <js-module src="www/DGGeofencing.js" name="DGGeofencing">
         <clobbers target="DGGeofencing" />
     </js-module>
+
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="DGGeofencing">
                 <param name="ios-package" value="DGGeofencing"/>
             </feature>
         </config-file>
-        <header-file src="src/ios/DGGeofencing.h" />
-        <source-file src="src/ios/DGGeofencing.m" />
+        <header-file src="src/ios/src/DGGeofencing.h" />
+        <source-file src="src/ios/src/DGGeofencing.m" />
     </platform>
+
+	<platform name="android">
+
+        <source-file src="src/android/src/com/phonegap/geofencing/DGGeofencing.java" target-dir="src/com/phonegap/geofencing" />
+        <source-file src="src/android/src/com/phonegap/geofencing/LocationChangedListener.java" target-dir="src/com/phonegap/geofencing" />
+        <source-file src="src/android/src/com/phonegap/geofencing/ProximityReceiver.java" target-dir="src/com/phonegap/geofencing" />
+
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="DGGeofencing">
+				   <param name="android-package" value="com.phonegap.geofencing.DGGeofencing" />
+			</feature>
+		</config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+			<receiver android:enabled="true" android:exported="false" android:name="com.phonegap.geofencing.ProximityReceiver">
+				<intent-filter>
+					<action android:name="geoFencingProximityAlert" />
+					<category android:name="android.intent.category.DEFAULT" />
+				</intent-filter>
+			</receiver>
+		</config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.CAMERA" />
+			<uses-permission android:name="android.permission.VIBRATE" />
+			<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+			<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+			<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+			<uses-permission android:name="android.permission.RECEIVE_SMS" />
+			<uses-permission android:name="android.permission.RECORD_AUDIO" />
+			<uses-permission android:name="android.permission.RECORD_VIDEO" />
+			<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+			<uses-permission android:name="android.permission.READ_CONTACTS" />
+			<uses-permission android:name="android.permission.WRITE_CONTACTS" />
+			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+			<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+			<uses-permission android:name="android.permission.BROADCAST_STICKY" />
+			<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+        </config-file>
+
+		<source-file src="src/android/libs/google-play-services.jar" target-dir="libs"/>
+
+    </platform>
+
 </plugin>

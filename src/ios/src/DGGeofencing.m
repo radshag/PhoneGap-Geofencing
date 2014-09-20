@@ -173,7 +173,7 @@
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-    } if ([self isAuthorized] == NO) {
+    } else if ([self isAuthorized] == NO) {
         lData.locationStatus = PERMISSIONDENIED;
         NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
         [posError setObject:[NSNumber numberWithInt:PERMISSIONDENIED] forKey:@"code"];
@@ -181,7 +181,7 @@
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-    } if ([self isRegionMonitoringAvailable] == NO) {
+    } else if ([self isRegionMonitoringAvailable] == NO) {
         lData.geofencingStatus = GEOFENCINGUNAVAILABLE;
         NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
         [posError setObject:[NSNumber numberWithInt:GEOFENCINGUNAVAILABLE] forKey:@"code"];
@@ -189,7 +189,7 @@
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-    } if ([self isRegionMonitoringEnabled] == NO) {
+    } else if ([self isRegionMonitoringEnabled] == NO) {
         lData.geofencingStatus = GEOFENCINGPERMISSIONDENIED;
         NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
         [posError setObject:[NSNumber numberWithInt:GEOFENCINGPERMISSIONDENIED] forKey:@"code"];

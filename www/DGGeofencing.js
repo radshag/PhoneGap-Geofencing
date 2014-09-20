@@ -45,26 +45,6 @@ DGGeofencing.prototype.stopMonitoringRegion = function (params, success, fail) {
  Params:
  NONE
  */
-/*
-DGGeofencing.prototype.getWatchedRegionIds = function (success, fail) {
-    return Cordova.exec(success, fail, "DGGeofencing", "getWatchedRegionIds", []);
-};
-*/
-
-/*
- Params:
- NONE
- */
- /*
-DGGeofencing.prototype.getPendingRegionUpdates = function (success, fail) {
-    return Cordova.exec(success, fail, "DGGeofencing", "getPendingRegionUpdates", []);
-};
-*/
-
-/*
- Params:
- NONE
- */
 DGGeofencing.prototype.startMonitoringSignificantLocationChanges = function (success, fail) {
     return Cordova.exec(success, fail, "DGGeofencing", "startMonitoringSignificantLocationChanges", []);
 };

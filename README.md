@@ -18,19 +18,24 @@ I am happy to offer my consulting services if needed and can be contacted at: do
 
 Geofencing is a way to monitor geographic regions.  In iOS it allows an app to be informed when a specified geographic region is entered or exited.
 
-## SETUP ##
+## Installation
 
-Using this plugin requires [Cordova iOS](https://github.com/apache/incubator-cordova-ios).
+For Android you need to install google play services.
 
-To install the plugin in your app, execute the following (replace variables where necessary)...
+The plugin can either be installed into the local development environment or cloud based through [PhoneGap Build][PGB].
 
-	cordova create myApp
+### Adding the Plugin to your project
+Through the [Command-line Interface][CLI]:
+```bash
+# ~~ from master ~~
+cordova plugin add https://github.com/radshag/PhoneGap-Geofencing.git && cordova prepare
+```
 
-	cd myApp/
-
-	cordova platform add ios
-
-	cordova -d plugin https://github.com/radshag/PhoneGap-Geofencing.git
+### Removing the Plugin from your project
+Through the [Command-line Interface][CLI]:
+```bash
+cordova plugin rm com.ogonium.goldberg.dov.geofencing
+```
 
 ## INCLUDED FUNTIONS ##
 
@@ -53,8 +58,8 @@ The parameters are:
 4. radius - Integer - Specifies the radius in meters of the region.
 
 Example:
-
-	var params = [location.id, location.location.lat, location.location.lng, "10"];
+	
+	var params = ['fid' : location.id, 'latitude' : location.location.lat, 'longitude' : location.location.lng, 'radius' : "10"];
 	DGGeofencing.startMonitoringRegion(params, function(result) {}, function(error) {
 		alert("failed to add region");
 	});
@@ -67,7 +72,7 @@ The parameters are:
 
 Example:
 
-	var params = [item.fid, item.latitude, item.longitude];
+	var params = ['fid' : item.fid, 'latitude' : item.latitude, 'longitude' : item.longitude];
 	DGGeofencing.stopMonitoringRegion(params, 
 	function(result) {
 
@@ -114,7 +119,7 @@ This setup will allow the JavaScript to receive updates both when the app is run
 Example:
 
 ```
-// gets called when region monitoring event is submitted from iOS
+// gets called when region monitoring event is submitted from iOS, Android
 function processRegionMonitorCallback (result) {
     var callbacktype = result.callbacktype;
 
@@ -172,7 +177,7 @@ function onDeviceReady () {
         console.log("init error");
     });
 
-    var params = ['1', '40.781552', '-73.967171', "150"];
+    var params = ['fid' : '1', 'latitude' : '40.781552', longitude : '-73.967171', 'radius' : "150"];
     window.plugins.DGGeofencing.startMonitoringRegion(params, function(result) { console.log('watching');}, function(error) {
         console.log("failed to add region");
     });
@@ -183,7 +188,6 @@ document.addEventListener("deviceready", onDeviceReady, false);
 ```
 
 
-	
 ## USAGE SAMPLE CODE ##
 
 Feel free to take a look at a project I have made that uses the above plugin.
