@@ -64,8 +64,6 @@
 			<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
         </config-file>
 
-		<source-file src="src/android/libs/google-play-services.jar" target-dir="libs"/>
-
     </platform>
 
 </plugin>
