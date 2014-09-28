@@ -39,8 +39,8 @@
         NSString *version = [[UIDevice currentDevice] systemVersion];
         if ([version floatValue] >= 8.0f) //for iOS8
         {
-            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-                [self.locationManager requestWhenInUseAuthorization];
+            if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+                [self.locationManager requestAlwaysAuthorization];
             }
         }
 
