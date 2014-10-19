@@ -35,6 +35,15 @@
     if (self) {
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self; // Tells the location manager to send updates to this object
+        
+        NSString *version = [[UIDevice currentDevice] systemVersion];
+        if ([version floatValue] >= 8.0f) //for iOS8
+        {
+            if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+                [self.locationManager requestAlwaysAuthorization];
+            }
+        }
+
         __locationStarted = NO;
         __highAccuracyEnabled = NO;
         self.locationData = nil;
@@ -58,9 +67,17 @@
 
 - (BOOL) isRegionMonitoringAvailable
 {
-	BOOL regionMonitoringAvailableClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringAvailable)];
-    if (regionMonitoringAvailableClassPropertyAvailable)
-    {
+    // iOS 4.x, iOS 5.x, iOS 6.x
+    BOOL regionMonitoringAvailableClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringAvailable)];
+    // iOS 7.0+
+    BOOL regionMonitoringAvailableForClassClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(isMonitoringAvailableForClass:)];
+    
+    if (regionMonitoringAvailableForClassClassPropertyAvailable)
+    { // iOS 7.0+
+        BOOL regionMonitoringAvailable = [CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]];
+        return  (regionMonitoringAvailable);
+    } else if (regionMonitoringAvailableClassPropertyAvailable)
+    { // iOS 4.x, iOS 5.x, iOS 6.x
         BOOL regionMonitoringAvailable = [CLLocationManager regionMonitoringAvailable];
         return  (regionMonitoringAvailable);
     }
@@ -71,9 +88,18 @@
 
 - (BOOL) isRegionMonitoringEnabled
 {
-	BOOL regionMonitoringEnabledClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringEnabled)];
-    if (regionMonitoringEnabledClassPropertyAvailable)
-    {
+	BOOL regionMonitoringEnabledClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(regionMonitoringEnabled)]; // iOS 4.0, 4.1
+    BOOL authorizationStatusClassPropertyAvailable = [CLLocationManager respondsToSelector:@selector(authorizationStatus)]; // iOS 4.2+
+    if (authorizationStatusClassPropertyAvailable)
+    { // iOS 4.2+
+        NSUInteger authStatus = [CLLocationManager authorizationStatus];
+        NSString *version = [[UIDevice currentDevice] systemVersion];
+        if ([version floatValue] >= 8.0f) //for iOS8
+            return (authStatus == kCLAuthorizationStatusAuthorizedAlways || authStatus == kCLAuthorizationStatusAuthorizedWhenInUse);
+        else // for iOS < 8.0
+            return  (authStatus == kCLAuthorizationStatusAuthorized) || (authStatus == kCLAuthorizationStatusNotDetermined);
+    } else if (regionMonitoringEnabledClassPropertyAvailable)
+    { // iOS 4.0, 4.1
         BOOL regionMonitoringEnabled = [CLLocationManager regionMonitoringEnabled];
         return  (regionMonitoringEnabled);
     }
@@ -88,7 +114,11 @@
     if (authorizationStatusClassPropertyAvailable)
     {
         NSUInteger authStatus = [CLLocationManager authorizationStatus];
-        return  (authStatus == kCLAuthorizationStatusAuthorized) || (authStatus == kCLAuthorizationStatusNotDetermined);
+        NSString *version = [[UIDevice currentDevice] systemVersion];
+        if ([version floatValue] >= 8.0f) //for iOS8
+            return (authStatus == kCLAuthorizationStatusAuthorizedAlways || authStatus == kCLAuthorizationStatusAuthorizedWhenInUse);
+        else // for iOS < 8.0
+            return  (authStatus == kCLAuthorizationStatusAuthorized) || (authStatus == kCLAuthorizationStatusNotDetermined);
     }
     
     // by default, assume YES (for iOS < 4.2)
@@ -147,7 +177,7 @@
     NSString *latitude = [command.arguments objectAtIndex:1];
     NSString *longitude = [command.arguments objectAtIndex:2];
     double radius = [[command.arguments objectAtIndex:3] doubleValue];
-    CLLocationAccuracy accuracy = [[command.arguments objectAtIndex:4] floatValue];
+    //CLLocationAccuracy accuracy = [[command.arguments objectAtIndex:4] floatValue];
     
     DGLocationData* lData = self.locationData;
     NSString *callbackId = [lData.geofencingCallbacks objectAtIndex:0];
@@ -160,7 +190,7 @@
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-    } if ([self isAuthorized] == NO) {
+    } else if ([self isAuthorized] == NO) {
         lData.locationStatus = PERMISSIONDENIED;
         NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
         [posError setObject:[NSNumber numberWithInt:PERMISSIONDENIED] forKey:@"code"];
@@ -168,7 +198,7 @@
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-    } if ([self isRegionMonitoringAvailable] == NO) {
+    } else if ([self isRegionMonitoringAvailable] == NO) {
         lData.geofencingStatus = GEOFENCINGUNAVAILABLE;
         NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
         [posError setObject:[NSNumber numberWithInt:GEOFENCINGUNAVAILABLE] forKey:@"code"];
@@ -176,7 +206,7 @@
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:posError];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
-    } if ([self isRegionMonitoringEnabled] == NO) {
+    } else if ([self isRegionMonitoringEnabled] == NO) {
         lData.geofencingStatus = GEOFENCINGPERMISSIONDENIED;
         NSMutableDictionary* posError = [NSMutableDictionary dictionaryWithCapacity:2];
         [posError setObject:[NSNumber numberWithInt:GEOFENCINGPERMISSIONDENIED] forKey:@"code"];
@@ -186,7 +216,20 @@
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
     } else {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-        CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:radius identifier:regionId];
+        if(radius > locationManager.maximumRegionMonitoringDistance)
+        {
+            radius = locationManager.maximumRegionMonitoringDistance;
+        }
+        NSString *version = [[UIDevice currentDevice] systemVersion];
+        CLRegion *region = nil;
+ 
+        if ([version floatValue] >= 7.0f) //for iOS7
+        {
+            region =  [[CLCircularRegion alloc] initWithCenter:coord radius:radius identifier:regionId];
+        } else // iOS 7 below
+        {
+            region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:radius identifier:regionId];
+        }
         [self.locationManager startMonitoringForRegion:region];
     }
 }
@@ -200,7 +243,15 @@
     NSString *longitude = [command.arguments objectAtIndex:2];
     
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-    CLRegion *region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:10.0 identifier:regionId];
+    NSString *version = [[UIDevice currentDevice] systemVersion];
+    CLRegion *region = nil;
+    if ([version floatValue] >= 7.0f) //for iOS7
+    {
+        region =  [[CLCircularRegion alloc] initWithCenter:coord radius:10.0 identifier:regionId];
+    } else // iOS 7 below
+    {
+        region = [[CLRegion alloc] initCircularRegionWithCenter:coord radius:10.0 identifier:regionId];
+    }
     [[self locationManager] stopMonitoringForRegion:region];
     
     // return success to callback
