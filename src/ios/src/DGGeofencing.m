@@ -349,7 +349,7 @@
     
     if (![self isAuthorized])
     {
-        NSString* message = nil;
+        NSString* message = @"User has explicitly denied authorization for this application, or location services are disabled in Settings.";
         BOOL authStatusAvailable = [CLLocationManager respondsToSelector:@selector(authorizationStatus)]; // iOS 4.2+
         if (authStatusAvailable) {
             NSUInteger code = [CLLocationManager authorizationStatus];
