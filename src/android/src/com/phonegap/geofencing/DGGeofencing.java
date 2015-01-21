@@ -39,6 +39,7 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 	private LocationChangedListener locationChangedListener;
 	private Set<LocationChangedListener> listeners = new HashSet<LocationChangedListener>();
 	private Location oldLocation;
+	private boolean listening = false;
 	
 	private BroadcastReceiver receiver;
 	  
@@ -103,8 +104,6 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 	    if (location != null) {
 	      onLocationChanged(location);
 	    }
-	    
-	    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, INTERFAL_TIME, MIN_DISTANCE, this);	    
 	}
 
 	@Override
@@ -153,23 +152,7 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 		        
 		        Log.d(TAG, "adding region " + regionId);
 		        
-		        if (!isLocationServicesEnabled())
-		        {
-					JSONObject returnInfo = new JSONObject();				
-					returnInfo.put("code", DGLocationStatus.PERMISSIONDENIED.getStatusCode());
-					returnInfo.put("message", "Location services are disabled.");
-
-					errorCallback(returnInfo);
-		        }
-		        else if (!isGooglePlayServicesAvailable())
-		        {
-					JSONObject returnInfo = new JSONObject();				
-					returnInfo.put("code", DGGeofencingStatus.GEOFENCINGUNAVAILABLE.getStatusCode());
-					returnInfo.put("message", "Geofencing services are disabled.");
-
-					errorCallback(returnInfo);
-		        }
-		        else
+		        if(checkGeofencingAvailable())
 		        {
 		        	this.startMonitoringRegion(regionId, latitude, longitude, radius);
 		        	registerListener();
@@ -181,6 +164,8 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 					returnInfo.put("callbacktype", "monitorstart");
 
 					successCallback(returnInfo);
+					
+					currentCallbacks.success(returnInfo);
 		        }
 		        
 		        return true;
@@ -201,6 +186,8 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 				returnInfo.put("callbacktype", "monitorremoved");
         	
 				successCallback(returnInfo);
+				
+				currentCallbacks.success(returnInfo);
 		        
 		        return true;
 		    }
@@ -208,24 +195,10 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 		    {
 		        Log.d(TAG, "startMonitoringSignificantLocationChanges");
 	        	
-		        if (!isLocationServicesEnabled())
+		        if (checkGeofencingAvailable())
 		        {
-					JSONObject returnInfo = new JSONObject();				
-					returnInfo.put("code", DGLocationStatus.PERMISSIONDENIED.getStatusCode());
-					returnInfo.put("message", "Location services are disabled.");
-
-					errorCallback(returnInfo);
-		        }
-		        else if (!isGooglePlayServicesAvailable())
-		        {
-					JSONObject returnInfo = new JSONObject();				
-					returnInfo.put("code", DGGeofencingStatus.GEOFENCINGUNAVAILABLE.getStatusCode());
-					returnInfo.put("message", "Geofencing services are disabled.");
-
-					errorCallback(returnInfo);
-		        }
-		        else
-		        {
+		        	startListening();
+		        	
 			        if (locationChangedListener == null)
 			        {
 			        	locationChangedListener = new LocationChangedListener()
@@ -239,6 +212,10 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 			        }
 			        
 			        addLocationChangedListener(locationChangedListener);
+			        
+			        JSONObject returnInfo = new JSONObject();
+			        returnInfo.put("message", "Successfully started monitoring significant location changes.");
+			        currentCallbacks.success(returnInfo);
 		        }
 		        
 				return true;
@@ -247,26 +224,27 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 	        {
 		        Log.d(TAG, "stopMonitoringSignificantLocationChanges");
 	        	
-		        if (!isLocationServicesEnabled())
+		        if (checkGeofencingAvailable())
 		        {
-					JSONObject returnInfo = new JSONObject();				
-					returnInfo.put("code", DGLocationStatus.PERMISSIONDENIED.getStatusCode());
-					returnInfo.put("message", "Location services are disabled.");
-
-					errorCallback(returnInfo);
-		        }
-		        else if (!isGooglePlayServicesAvailable())
-		        {
-					JSONObject returnInfo = new JSONObject();				
-					returnInfo.put("code", DGGeofencingStatus.GEOFENCINGUNAVAILABLE.getStatusCode());
-					returnInfo.put("message", "Geofencing services are disabled.");
-
-					errorCallback(returnInfo);
-		        }
-		        else
-		        {	        	
+		        	boolean removed = false;
 		        	if (locationChangedListener != null)
+		        	{
 		        		removeLocationChangedListener(locationChangedListener);
+		        		removed = true;
+		        	}
+		        	
+		        	JSONObject returnInfo = new JSONObject();
+		        	String message;
+		        	if(removed)
+		        	{
+		        		message = "Location listener was successfully removed.";
+		        	}
+		        	else
+		        	{
+		        		message = "A location listener was not previously set.";
+		        	}
+		        	returnInfo.put("message", message);
+		        	currentCallbacks.success(returnInfo);
 		        }
 		        
 		        return true;
@@ -278,6 +256,42 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 	    }
 	
 	    return false;
+	}
+
+	private boolean checkGeofencingAvailable() throws JSONException
+	{
+		if (!isLocationServicesEnabled())
+		{
+			JSONObject returnInfo = new JSONObject();				
+			returnInfo.put("code", DGLocationStatus.PERMISSIONDENIED.getStatusCode());
+			returnInfo.put("message", "Location services are disabled.");
+
+			errorCallback(returnInfo);
+
+			if(currentCallbacks != null)
+			{
+				currentCallbacks.error(returnInfo);
+			}
+
+			return false;
+		}
+		else if (!isGooglePlayServicesAvailable())
+		{
+			JSONObject returnInfo = new JSONObject();				
+			returnInfo.put("code", DGGeofencingStatus.GEOFENCINGUNAVAILABLE.getStatusCode());
+			returnInfo.put("message", "Geofencing services are disabled.");
+
+			errorCallback(returnInfo);
+
+			if(currentCallbacks != null)
+			{
+				currentCallbacks.error(returnInfo);
+			}
+
+			return false;
+		}
+
+		return true;
 	}
 
 	private boolean isLocationServicesEnabled()
@@ -301,6 +315,8 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 	}
 	
 	public void startMonitoringRegion(String id, double latitude, double longitude, float radius) {
+		startListening();
+		
 		PendingIntent proximityIntent = createIntent(id);
 	    locationManager.addProximityAlert(latitude, longitude, radius, -1, proximityIntent);
 	}
@@ -319,10 +335,14 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 
 	public void addLocationChangedListener(LocationChangedListener listener) {
 		listeners.add(listener);
+		
+		startListening();
 	}
 
 	public void removeLocationChangedListener(LocationChangedListener listener) {
 		listeners.remove(listener);
+		
+		stopListeningIfNoListeners();
 	}
 	
 	void fireLocationChangedEvent(final Location location) {
@@ -520,6 +540,24 @@ public class DGGeofencing extends CordovaPlugin implements LocationListener
 	            }
 			});
     	}
+	}
+	
+	private void startListening()
+	{
+		if(!listening)
+		{
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, INTERFAL_TIME, MIN_DISTANCE, this);
+			listening = true;
+		}
+	}
+	
+	private void stopListeningIfNoListeners()
+	{
+		if(listeners.size() == 0 && listening)
+		{
+			locationManager.removeUpdates(this);
+			listening = false;
+		}
 	}
 
 	@Override
