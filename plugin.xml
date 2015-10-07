@@ -30,7 +30,7 @@
     </platform>
 
 	<platform name="android">
-
+        <framework src="com.google.android.gms:play-services-gcm:7.5.0" />
         <source-file src="src/android/src/com/phonegap/geofencing/DGGeofencing.java" target-dir="src/com/phonegap/geofencing" />
         <source-file src="src/android/src/com/phonegap/geofencing/LocationChangedListener.java" target-dir="src/com/phonegap/geofencing" />
         <source-file src="src/android/src/com/phonegap/geofencing/ProximityReceiver.java" target-dir="src/com/phonegap/geofencing" />
