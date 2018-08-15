@@ -3,7 +3,7 @@ PhoneGap-Geofencing
 
 Geofencing And Significant Location Change Monitoring Plugin For PhoneGap.
 
-This Phonegap Plugin has been developed by Dov Goldberg of Ogonium.  Feel free to use the code in any projects according the the license at the bottom of this readme.
+This Phonegap Plugin has been developed by Dov Goldberg of Ogonium.  Feel free to use the code in any projects according to the license at the bottom of this readme.
 
 I am happy to offer my consulting services if needed and can be contacted at: dov.goldberg@ogonium.com
 
@@ -37,7 +37,7 @@ Through the [Command-line Interface][CLI]:
 cordova plugin rm com.ogonium.goldberg.dov.geofencing
 ```
 
-## INCLUDED FUNTIONS ##
+## INCLUDED FUNCTIONS ##
 
 DGGeofencing.js contains the following functions:
 
